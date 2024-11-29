@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid())
+  fullName       String
+  email          String          @unique
+  password       String
+  avatarUrl      String?
+  createdAt      DateTime        @default(now())
+  active         Boolean         @default(true)
+  resetPasswords ResetPassword[]
+  roles          Role[]          @relation("roles_on_users")
+
+  @@index([email])
+  @@index([fullName])
+  @@map("users")
+}
+
+model ResetPassword {
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([code])
+  @@map("reset_passwords")
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  createdAt   DateTime     @default(now())
+  active      Boolean      @default(true)
+  permissions Permission[] @relation("permissions_on_roles")
+  users       User[]       @relation("roles_on_users")
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  identifier  String   @unique
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  active      Boolean  @default(true)
+  roles       Role[]   @relation("permissions_on_roles")
+
+  @@map("permissions")
+}
