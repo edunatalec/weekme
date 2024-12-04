@@ -3,9 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UserRepository } from 'src/core/database/repositories/user.repository';
 import { JwtPayloadModel } from 'src/core/models/jwt.model';
-import { hashPassword } from 'src/modules/auth/utils/password.utils';
+import {
+  hashPassword,
+  validatePassword,
+} from 'src/modules/auth/utils/password.utils';
 import { AuthResponseDto } from 'src/modules/auth/dtos/auth.dto';
 import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
+import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +17,23 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}
+
+  public async signIn(data: SignInBodyDto): Promise<AuthResponseDto | null> {
+    const user: User = await this.userRepository.user.findFirst({
+      where: { email: data.email, active: true },
+    });
+
+    if (!user) return null;
+
+    const isPasswordValid = await validatePassword(
+      data.password,
+      user.password,
+    );
+
+    if (!isPasswordValid) return null;
+
+    return this.getAccessToken(user);
+  }
 
   public async signUp(data: SignUpBodyDto): Promise<AuthResponseDto> {
     const hashedPassword = await hashPassword(data.password);
