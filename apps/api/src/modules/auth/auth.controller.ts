@@ -13,6 +13,7 @@ import { AuthResponseDto } from 'src/modules/auth/dtos/auth.dto';
 import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
 import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
 
+@IsPublic()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
@@ -29,7 +30,6 @@ export class AuthController {
   }
 
   @SignInEndpoint()
-  @IsPublic()
   public async signIn(@Body() body: SignInBodyDto): Promise<AuthResponseDto> {
     const response = await this.service.signIn(body);
 
