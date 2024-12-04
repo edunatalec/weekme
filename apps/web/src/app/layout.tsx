@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Poppins as FontSans } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { Poppins } from "next/font/google";
 
 import "@/styles/globals.css";
 
-const fontSans = FontSans({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
   title: "S3curity",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -21,14 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning className="dark">
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
-        {children}
-      </body>
+      <body className={poppins.variable}>{children}</body>
     </html>
   );
 }

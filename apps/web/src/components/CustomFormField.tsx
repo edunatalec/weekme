@@ -1,0 +1,65 @@
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { HTMLInputTypeAttribute } from "react";
+import { Control, FieldPath, FieldValues } from "react-hook-form";
+
+export interface Props<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> {
+  control: Control<TFieldValues, TName>;
+  name: TName;
+  label: string;
+  type: HTMLInputTypeAttribute;
+  icon: IconProps;
+}
+
+interface IconProps {
+  icon: React.ElementType;
+  onClick?: () => void;
+  ariaLabel?: string | undefined;
+}
+
+export const CustomFormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  label,
+  icon: { icon: Icon, ...icon },
+  type,
+  ...form
+}: Props<TFieldValues, TName>) => {
+  return (
+    <FormField
+      {...form}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <div className="relative">
+              <Input {...field} type={type} />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-4 top-1/2 -translate-y-1/2"
+                onClick={icon.onClick}
+                aria-label={icon.ariaLabel}
+              >
+                {<Icon width={18} height={18} />}
+              </Button>
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};

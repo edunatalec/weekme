@@ -2,17 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const loginValidationSchema = z.object({
-  email: z.string().email("E-mail inválido"),
+const schema = z.object({
+  email: z.string({ message: "Obrigatório" }).email("E-mail inválido"),
   password: z
-    .string()
+    .string({ message: "Obrigatório" })
     .min(8, "Precisa ter no mínimo 8 caracteres")
     .max(20, "Precisa ter no máximo 20 caracteres"),
 });
 
-export const useLoginForm = () => {
-  return useForm<z.infer<typeof loginValidationSchema>>({
-    resolver: zodResolver(loginValidationSchema),
+export type SignInFormData = z.infer<typeof schema>;
+
+export const useSignInForm = () => {
+  return useForm<SignInFormData>({
+    resolver: zodResolver(schema),
     defaultValues: {
       email: "",
       password: "",
