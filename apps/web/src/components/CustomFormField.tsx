@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { HTMLInputTypeAttribute } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -49,7 +50,10 @@ export const CustomFormField = <
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute right-4 top-1/2 -translate-y-1/2"
+                className={cn(
+                  "absolute right-4 top-1/2 -translate-y-1/2",
+                  !icon.onClick && "cursor-default hover:bg-transparent",
+                )}
                 onClick={icon.onClick}
                 aria-label={icon.ariaLabel}
               >
