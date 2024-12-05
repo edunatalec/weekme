@@ -2,7 +2,7 @@ import { CustomFormField } from "@/components/CustomFormField";
 import { Mail } from "lucide-react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
-export interface Props<
+interface Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {

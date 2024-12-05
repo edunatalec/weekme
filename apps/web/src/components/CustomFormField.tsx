@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { HTMLInputTypeAttribute } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
-export interface Props<
+interface Props<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -53,7 +53,7 @@ export const CustomFormField = <
                 onClick={icon.onClick}
                 aria-label={icon.ariaLabel}
               >
-                {<Icon width={18} height={18} />}
+                {<Icon />}
               </Button>
             </div>
           </FormControl>
