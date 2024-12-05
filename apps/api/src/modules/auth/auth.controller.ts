@@ -1,10 +1,19 @@
 import { Body, Controller } from '@nestjs/common';
-import { SignUpEndpoint } from 'src/modules/auth/auth.decorators';
-import { UserAlreadyRegisteredException } from 'src/modules/auth/auth.exceptions';
+import { IsPublic } from 'src/core/decorators/is-public.decorator';
+import {
+  SignInEndpoint,
+  SignUpEndpoint,
+} from 'src/modules/auth/auth.decorators';
+import {
+  UserAlreadyRegisteredException,
+  WrongPasswordOrEmailException,
+} from 'src/modules/auth/auth.exceptions';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { AuthResponseDto } from 'src/modules/auth/dtos/auth.dto';
+import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
 import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
 
+@IsPublic()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
@@ -18,5 +27,16 @@ export class AuthController {
     }
 
     return this.service.signUp(body);
+  }
+
+  @SignInEndpoint()
+  public async signIn(@Body() body: SignInBodyDto): Promise<AuthResponseDto> {
+    const response = await this.service.signIn(body);
+
+    if (!response) {
+      throw new WrongPasswordOrEmailException();
+    }
+
+    return response;
   }
 }
