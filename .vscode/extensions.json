@@ -8,6 +8,7 @@
     "esbenp.prettier-vscode",
     "prisma.prisma",
     "bradlc.vscode-tailwindcss",
-    "dsznajder.es7-react-js-snippets"
+    "dsznajder.es7-react-js-snippets",
+    "bruceyuhb.hsl-preview"
   ]
 }
