@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Roboto } from "next/font/google";
 
 import "@/styles/globals.css";
+import { ThemeProvider } from "@/contexts/ThemeProvider";
 
-const poppins = Poppins({
+const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-poppins",
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
-  title: "S3curity",
+  title: "WeekMe",
   icons: {
     icon: "/favicon.ico",
   },
@@ -22,8 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className="dark">
-      <body className={poppins.variable}>{children}</body>
+    <html lang="pt-BR" suppressHydrationWarning data-theme-loading>
+      <body className={roboto.variable}>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

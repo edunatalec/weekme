@@ -11,7 +11,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["var(--font-poppins)", ...fontFamily.sans],
+        roboto: ["var(--font-roboto)", ...fontFamily.sans],
       },
       boxShadow: {
         "inner-shadow": "inset 0 0 0 1px rgba(151, 151, 151, 0.2)",
