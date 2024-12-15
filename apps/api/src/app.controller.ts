@@ -2,10 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  @Get()
+  @Get('ping')
   public ping() {
     return {
-      status: 'OK',
+      status: 'pong',
       timestamp: new Date().toISOString(),
     };
   }
