@@ -1,6 +1,6 @@
 import { CustomFormField } from "@/components/CustomFormField";
 import { Eye, EyeOff } from "lucide-react";
-import React, { useState } from "react";
+import { useReducer } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
 interface Props<
@@ -17,7 +17,10 @@ export const PasswordFormField = <
 >(
   form: Props<TFieldValues, TName>,
 ) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, toggleShowPassword] = useReducer(
+    (show: boolean) => !show,
+    false,
+  );
 
   return (
     <CustomFormField
@@ -26,7 +29,7 @@ export const PasswordFormField = <
       type={showPassword ? "text" : "password"}
       icon={{
         ariaLabel: "Alternar visibilidade da senha",
-        onClick: () => setShowPassword(!showPassword),
+        onClick: toggleShowPassword,
         icon: showPassword ? Eye : EyeOff,
       }}
     />
