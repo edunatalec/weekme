@@ -1,6 +1,5 @@
 import { CustomFormField } from "@/components/CustomFormField";
-import { Eye, EyeOff } from "lucide-react";
-import { useReducer } from "react";
+import { User } from "lucide-react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
 interface Props<
@@ -11,25 +10,19 @@ interface Props<
   name: TName;
 }
 
-export const PasswordFormField = <
+export const NameFormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
   form: Props<TFieldValues, TName>,
 ) => {
-  const [showPassword, toggleShowPassword] = useReducer(
-    (show: boolean) => !show,
-    false,
-  );
-
   return (
     <CustomFormField
       {...form}
-      label="Senha"
-      type={showPassword ? "text" : "password"}
+      label="Nome"
+      type="text"
       iconLeft={{
-        onClick: toggleShowPassword,
-        icon: showPassword ? <Eye /> : <EyeOff />,
+        icon: <User />,
       }}
     />
   );
