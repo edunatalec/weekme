@@ -1,8 +1,18 @@
+import { CardForm } from "../components/CardForm";
+import { SignUpForm } from "./components/SignUpForm";
+
 const SignUpPage = () => {
   return (
-    <div>
-      <h1>Sign Up</h1>
-    </div>
+    <CardForm
+      title="Cadastre-se"
+      footer={{
+        text: "Já possui conta?",
+        link: "Faça o login",
+        linkUrl: "/sign-in",
+      }}
+    >
+      <SignUpForm />
+    </CardForm>
   );
 };
 

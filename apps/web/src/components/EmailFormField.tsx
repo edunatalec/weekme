@@ -21,7 +21,7 @@ export const EmailFormField = <
       {...form}
       label="E-mail"
       type="email"
-      icon={{ icon: Mail }}
+      iconLeft={{ icon: <Mail /> }}
     />
   );
 };
