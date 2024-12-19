@@ -1,4 +1,4 @@
-import { RoleEntity } from './role.entity';
+// import { RoleEntity } from './role.entity';
 
 type UserEntityArguments = {
   id: string;
@@ -7,7 +7,7 @@ type UserEntityArguments = {
   active: boolean;
   password?: string;
   avatarUrl?: string;
-  role?: RoleEntity;
+  // role?: RoleEntity;
 };
 
 export class UserEntity {
@@ -17,7 +17,7 @@ export class UserEntity {
   readonly active: boolean;
   readonly password?: string;
   readonly avatarUrl?: string;
-  readonly role?: RoleEntity;
+  // readonly role?: RoleEntity;
 
   constructor(readonly args: UserEntityArguments) {
     this.id = args.id;
@@ -26,6 +26,6 @@ export class UserEntity {
     this.active = args.active;
     this.avatarUrl = args.avatarUrl;
     this.password = args.password;
-    this.role = args.role;
+    // this.role = args.role;
   }
 }
