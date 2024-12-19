@@ -8,9 +8,8 @@ import { Pageable } from 'src/core/interfaces/Pageable';
 export type FindUserArgs =
   | { id: string; email?: never }
   | { id?: never; email: string };
-export type FindUsersArgs = { page?: number; size?: number; name?: string };
+export type FindUsersArgs = { page: number; size: number; name: string };
 export type ActivateUserArgs = { userId: string; status: 'ACTIVE' | 'BLOCKED' };
-// type EditUserRoleArgs = { userId: string; role: RoleEntity };
 
 @Injectable()
 export class UserRepository {
@@ -21,11 +20,10 @@ export class UserRepository {
   }
 
   public async findUser(args: FindUserArgs): Promise<UserEntity | null> {
-    const id = args.id ? { id: { equals: args.id } } : {};
-    const email = args.email ? { email: { equals: args.email } } : {};
-
     const user = await this.service.user.findFirst({
-      where: { ...id, ...email },
+      where: {
+        OR: [{ id: { equals: args.id } }, { email: { equals: args.email } }],
+      },
       select: {
         id: true,
         active: true,
@@ -38,14 +36,17 @@ export class UserRepository {
     return user ? new UserEntity(user) : null;
   }
 
-  public async findUsers(args: FindUsersArgs): Promise<Pageable<UserEntity>> {
-    const { page = 1, size = 10, name } = args;
+  public async findUsers({
+    page,
+    size,
+    name,
+  }: FindUsersArgs): Promise<Pageable<UserEntity>> {
     const skipedElements = (page - 1) * size;
 
     const [total, users] = await this.service.$transaction([
       this.service.user.count({ where: { fullName: { contains: name } } }),
       this.service.user.findMany({
-        where: { fullName: { contains: name } },
+        where: { fullName: { contains: name, mode: 'insensitive' } },
         skip: skipedElements,
         take: size,
         select: {

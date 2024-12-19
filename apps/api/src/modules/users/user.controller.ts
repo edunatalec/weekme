@@ -38,14 +38,8 @@ export class UserController {
 
   @Get()
   public async listUsersBy(
-    @Query() params: ListUsersByDto,
+    @Query() { name = '', page = 1, size = 10 }: ListUsersByDto,
   ): Promise<Pageable<UserEntity>> {
-    // TODO: adicionar validação para page e size negativos
-    // TODO: adicionra validação para max_page_size (100 talvez)
-    const name = params.name ?? '';
-    const page = parseInt(params?.page ?? '1', 10);
-    const size = parseInt(params?.size ?? '10', 10);
-
     return await this.userService.findUsers({ name, page, size });
   }
 }
