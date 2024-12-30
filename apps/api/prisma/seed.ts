@@ -89,19 +89,9 @@ const seedPermissions = async () => {
       description: 'Permissão para visualizar a sessão de permissões',
     },
     {
-      identifier: 'permissions:create',
-      name: 'Criar permissão',
-      description: 'Permissão para criar novos permissões',
-    },
-    {
       identifier: 'permissions:update',
       name: 'Atualizar permissão',
       description: 'Permissão para atualizar permissões',
-    },
-    {
-      identifier: 'permissions:delete',
-      name: 'Deletar permissão',
-      description: 'Permissão para deletar permissões',
     },
 
     {

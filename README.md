@@ -12,9 +12,7 @@ npm i
 
 Temos que criar os arquivos `.env` dentro da raiz de cada projeto que fica dentro de `apps/` seguindo a base do seu exemplo `.env.example`. Cada arquivo `.env.example` tem um demonstrativo e comentários para demostrar como deve ser feito a sua configuração. Quando terminar de configurar o resultado esperado deve ser algo semelhante a imagem abaixo:
 
-```
-Imagem
-```
+![Exemplo de .env](assets/env.png)
 
 Na primeira vez que rodarmos o projeto é importante deixar configurado o banco de dados e para precisamos criar as tabelas e alguns dados essenciais para o projeto funcionar corretamente. Então rodaremos o seguinte comando na na pasta raiz:
 
