@@ -73,14 +73,14 @@ const MODULES: {
   },
 };
 
-interface HasPermisisonProps<M extends keyof Modules> {
+interface HasPermissionProps<M extends keyof Modules> {
   module: M;
   action: Modules[M]["action"];
   data?: Modules[M]["dataType"];
 }
 
 type HasPermission = <M extends keyof Modules>(
-  props: HasPermisisonProps<M>,
+  props: HasPermissionProps<M>,
 ) => boolean;
 
 export const usePermission = (): {
@@ -92,7 +92,7 @@ export const usePermission = (): {
     module,
     action,
     data,
-  }: HasPermisisonProps<M>): boolean => {
+  }: HasPermissionProps<M>): boolean => {
     if (!user) return false;
 
     const permissions = MODULES[module][action];

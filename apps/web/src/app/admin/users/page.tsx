@@ -13,9 +13,12 @@ const Page = () => {
     const loadUsers = async () => {
       setLoading(true);
 
-      const response = await getUsers(page);
+      try {
+        const response = await getUsers(page);
 
-      setUsers(response);
+        setUsers(response.data);
+      } catch (_) {}
+
       setLoading(false);
     };
 

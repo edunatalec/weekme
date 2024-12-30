@@ -1,3 +1,3 @@
-export class AuthResponseDto {
+export interface TokenResponse {
   readonly accessToken: string;
 }

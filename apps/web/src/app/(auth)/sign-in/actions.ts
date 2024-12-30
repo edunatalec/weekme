@@ -2,11 +2,12 @@
 
 import { SignInFormData } from "@/app/(auth)/sign-in/schema";
 import http from "@/services/http/http";
+import { TokenResponse } from "@repo/core";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const signIn = async (data: SignInFormData): Promise<void> => {
-  const response = await http.request({
+  const response = await http.request<TokenResponse>({
     endpoint: "auth/sign-in",
     method: "POST",
     body: {

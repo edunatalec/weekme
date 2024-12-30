@@ -1,10 +1,10 @@
 "use server";
 
 import http from "@/services/http/http";
-import { UserEntity } from "@repo/core";
+import { Pageable, UserEntity } from "@repo/core";
 
-export const getUsers = async (page: number): Promise<UserEntity[]> => {
-  const response = await http.request({
+export const getUsers = async (page: number): Promise<Pageable<UserEntity>> => {
+  const response = await http.request<Pageable<UserEntity>>({
     endpoint: "users",
     method: "GET",
     queryParams: {
@@ -12,7 +12,5 @@ export const getUsers = async (page: number): Promise<UserEntity[]> => {
     },
   });
 
-  console.log(response.data.data[0].roles[0].name);
-
-  return response.data.data;
+  return response.data;
 };

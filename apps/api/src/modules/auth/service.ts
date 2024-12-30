@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { TokenResponse } from '@repo/core';
 import { PrismaService } from 'src/core/database/prisma.service';
 import { JwtPayload } from 'src/core/interfaces/jwt-payload';
-import { AuthResponseDto } from 'src/modules/auth/dtos/auth.dto';
 import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
 import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
 import {
@@ -17,8 +17,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async signIn(data: SignInBodyDto): Promise<AuthResponseDto | null> {
-    const user = await this.prisma.user.findFirst({
+  public async signIn(data: SignInBodyDto): Promise<TokenResponse | null> {
+    const user = await this.prisma.user.findUnique({
       where: { email: data.email, active: true },
     });
 
@@ -34,10 +34,10 @@ export class AuthService {
     return this.getAccessToken(user.id);
   }
 
-  public async signUp(data: SignUpBodyDto): Promise<AuthResponseDto> {
+  public async signUp(data: SignUpBodyDto): Promise<TokenResponse> {
     const hashedPassword = await hashPassword(data.password);
 
-    const { id: roleId } = await this.prisma.role.findFirst({
+    const { id: roleId } = await this.prisma.role.findUnique({
       where: { name: 'Admin' },
     });
 
@@ -63,7 +63,7 @@ export class AuthService {
     return count > 0;
   }
 
-  private getAccessToken(id: string): AuthResponseDto {
+  private getAccessToken(id: string): TokenResponse {
     const payload: JwtPayload = {
       sub: id,
     };

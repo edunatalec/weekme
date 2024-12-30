@@ -65,8 +65,8 @@ export class AxiosProvider implements HttpProvider {
     });
   }
 
-  public async request(data: HttpResquest): Promise<HttpResponse> {
-    let response: HttpResponse;
+  public async request<T = any>(data: HttpResquest): Promise<HttpResponse<T>> {
+    let response: HttpResponse<T>;
 
     switch (data.method) {
       case "GET":
@@ -85,8 +85,8 @@ export class AxiosProvider implements HttpProvider {
 
     if (response.statusCode >= 400) {
       throw new HttpError({
-        data: response.data,
-        message: response.data["message"],
+        data: response.data as any,
+        message: (response.data as any)["message"],
         statusCode: response.statusCode,
       });
     }
@@ -94,7 +94,7 @@ export class AxiosProvider implements HttpProvider {
     return response;
   }
 
-  private async get(data: HttpResquest): Promise<HttpResponse> {
+  private async get<T>(data: HttpResquest): Promise<HttpResponse<T>> {
     const response = await this.instance.get(data.endpoint, {
       params: data.queryParams,
     });
@@ -102,7 +102,7 @@ export class AxiosProvider implements HttpProvider {
     return this.buildResponse(response);
   }
 
-  private async post(data: HttpResquest): Promise<HttpResponse> {
+  private async post<T>(data: HttpResquest): Promise<HttpResponse<T>> {
     const response = await this.instance.post(data.endpoint, data.body, {
       params: data.queryParams,
     });
@@ -110,7 +110,7 @@ export class AxiosProvider implements HttpProvider {
     return this.buildResponse(response);
   }
 
-  private async patch(data: HttpResquest): Promise<HttpResponse> {
+  private async patch<T>(data: HttpResquest): Promise<HttpResponse<T>> {
     const response = await this.instance.patch(data.endpoint, data.body, {
       params: data.queryParams,
     });
@@ -118,7 +118,7 @@ export class AxiosProvider implements HttpProvider {
     return this.buildResponse(response);
   }
 
-  private async delete(data: HttpResquest): Promise<HttpResponse> {
+  private async delete<T>(data: HttpResquest): Promise<HttpResponse<T>> {
     const response = await this.instance.delete(data.endpoint, {
       params: data.queryParams,
     });
@@ -126,7 +126,7 @@ export class AxiosProvider implements HttpProvider {
     return this.buildResponse(response);
   }
 
-  private buildResponse(response: AxiosResponse): HttpResponse {
+  private buildResponse<T>(response: AxiosResponse): HttpResponse<T> {
     return {
       data: response.data,
       statusCode: response.status,

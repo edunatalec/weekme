@@ -47,13 +47,13 @@ export class HttpResquest {
   }
 }
 
-export interface HttpResponse {
+export interface HttpResponse<T> {
   statusCode: number;
-  data: any;
+  data: T;
 }
 
 export abstract class HttpProvider {
-  abstract request(data: HttpResquest): Promise<HttpResponse>;
+  abstract request<T = any>(data: HttpResquest): Promise<HttpResponse<T>>;
 }
 
 const http = new AxiosProvider();

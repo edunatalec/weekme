@@ -3,6 +3,7 @@
   "ui": "tui",
   "tasks": {
     "prisma:push": {
+      "dependsOn": ["docker:up"],
       "cache": false
     },
     "prisma:generate": {
@@ -15,7 +16,7 @@
       "cache": false
     },
     "prisma:seed": {
-      "dependsOn": ["docker:up", "prisma:push", "prisma:generate"],
+      "dependsOn": ["prisma:push", "prisma:generate"],
       "cache": false
     },
     "build": {

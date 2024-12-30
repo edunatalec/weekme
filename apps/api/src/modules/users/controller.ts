@@ -1,6 +1,5 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
-import { UserEntity } from '@repo/core';
-import { Pageable } from 'src/core/interfaces/pageable';
+import { Pageable, UserEntity } from '@repo/core';
 import {
   DeleteUserEndpoint,
   GetUserByIdEndpoint,

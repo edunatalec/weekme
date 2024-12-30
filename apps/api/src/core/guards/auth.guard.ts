@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
       const token = authorization.split(' ')[1];
       const { sub: id } = this.jwtService.verify<JwtPayload>(token);
 
-      const user = await this.prisma.user.findFirst({
+      const user = await this.prisma.user.findUnique({
         where: { id, active: true },
         include: {
           roles: {

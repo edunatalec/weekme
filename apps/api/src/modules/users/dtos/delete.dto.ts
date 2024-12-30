@@ -1,6 +1,3 @@
-import { IsUUID } from 'class-validator';
+import { IdParamDto } from 'src/core/dtos/id.dto';
 
-export class DeleteUserParamDto {
-  @IsUUID()
-  readonly id: string;
-}
+export class DeleteUserParamDto extends IdParamDto {}

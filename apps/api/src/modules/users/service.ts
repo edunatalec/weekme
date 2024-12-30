@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from '@repo/core/dist';
+import { Pageable, UserEntity } from '@repo/core/dist';
 import { userToEntity } from 'src/core/database/mappers/user.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
-import { Pageable } from 'src/core/interfaces/pageable';
 import { SearchUsersQueryDto } from 'src/modules/users/dtos/search.dto';
 import { UpdateUserBodyDto } from 'src/modules/users/dtos/update.dto';
 
@@ -50,7 +49,7 @@ export class UserService {
   }
 
   public async getById(id: string): Promise<UserEntity | null> {
-    const response = await this.prisma.user.findFirst({
+    const response = await this.prisma.user.findUnique({
       where: { id },
       include: {
         roles: {
