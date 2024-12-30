@@ -72,9 +72,19 @@ export class UserService {
     id: string,
     body: UpdateUserBodyDto,
   ): Promise<UserEntity> {
-    console.log(id);
-    console.log(body);
-    return;
+    const response = await this.prisma.user.update({
+      where: { id },
+      data: body,
+      include: {
+        roles: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
+    });
+
+    return userToEntity(response);
   }
 
   public async delete(id: string): Promise<void> {

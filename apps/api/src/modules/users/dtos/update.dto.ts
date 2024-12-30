@@ -1,4 +1,10 @@
-import { IsBoolean, IsString, IsUUID, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 
 export class UpdateUserParamDto {
   @IsUUID()
@@ -8,8 +14,10 @@ export class UpdateUserParamDto {
 export class UpdateUserBodyDto {
   @IsString()
   @MinLength(3)
-  readonly fullName: string;
+  @IsOptional()
+  readonly fullName?: string;
 
   @IsBoolean()
-  readonly active: boolean;
+  @IsOptional()
+  readonly active?: boolean;
 }
