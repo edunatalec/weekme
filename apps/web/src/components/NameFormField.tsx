@@ -17,13 +17,6 @@ export const NameFormField = <
   form: Props<TFieldValues, TName>,
 ) => {
   return (
-    <CustomFormField
-      {...form}
-      label="Nome"
-      type="text"
-      iconLeft={{
-        icon: <User />,
-      }}
-    />
+    <CustomFormField {...form} label="Nome" type="text" leftIcon={<User />} />
   );
 };

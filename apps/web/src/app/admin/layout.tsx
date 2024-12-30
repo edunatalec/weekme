@@ -1,11 +1,18 @@
+"use client";
+
 import Header from "@/app/admin/_components/Header";
 import Sidebar from "@/app/admin/_components/Sidebar";
+import { useSession } from "@/contexts/SessionProvider";
 
 interface Props {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: Props) => {
+  const { loading } = useSession();
+
+  if (loading) return <div>loading...</div>;
+
   return (
     <div className="flex h-full flex-col">
       <Header />

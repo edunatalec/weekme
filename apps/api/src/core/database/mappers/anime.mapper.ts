@@ -1,0 +1,17 @@
+import { AnimeEntity } from '@repo/core';
+import { animeScheduleToEntity } from 'src/core/database/mappers/anime-schedule.mapper';
+import { baseToEntity } from 'src/core/database/mappers/base.mapper';
+import { seasonToEntity } from 'src/core/database/mappers/season.mapper';
+
+export const animeToEntity = (anime): AnimeEntity => {
+  return {
+    name: anime.name,
+    imageUrl: anime.imageUrl,
+    backgroundUrl: anime.backgroundUrl,
+    synopsis: anime.synopsis,
+    status: anime.status,
+    schedule: animeScheduleToEntity(anime.schedule),
+    seasons: anime.seasons.map((season) => seasonToEntity(season)),
+    ...baseToEntity(anime),
+  };
+};

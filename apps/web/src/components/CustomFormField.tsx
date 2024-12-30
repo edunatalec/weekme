@@ -1,3 +1,4 @@
+import IconButton from "@/components/IconButton";
 import {
   FormControl,
   FormField,
@@ -8,7 +9,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { HTMLInputTypeAttribute, ReactNode } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
-import { ButtonIcon } from "./ButtonIcon";
 
 interface Props<
   TFieldValues extends FieldValues = FieldValues,
@@ -18,13 +18,13 @@ interface Props<
   name: TName;
   label: string;
   type: HTMLInputTypeAttribute;
-  iconLeft: IconProps;
-  iconRight?: IconProps;
+  leftIcon: ReactNode;
+  rightIcon?: IconProps;
 }
 
 type IconProps = {
-  icon: ReactNode; 
-  onClick?: () => void; 
+  icon: ReactNode;
+  onClick: () => void;
 };
 
 export const CustomFormField = <
@@ -32,8 +32,8 @@ export const CustomFormField = <
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   label,
-  iconLeft,
-  iconRight,
+  leftIcon,
+  rightIcon,
   type,
   ...form
 }: Props<TFieldValues, TName>) => {
@@ -45,13 +45,20 @@ export const CustomFormField = <
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2">
+                {leftIcon}
+              </span>
+
               <Input {...field} type={type} className="px-14" />
 
-              <ButtonIcon position="left">{iconLeft.icon}</ButtonIcon>
-
-              <ButtonIcon position="right" onClick={iconRight?.onClick}>
-                {iconRight?.icon}
-              </ButtonIcon>
+              {rightIcon && (
+                <IconButton
+                  onClick={rightIcon?.onClick}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                >
+                  {rightIcon?.icon}
+                </IconButton>
+              )}
             </div>
           </FormControl>
           <FormMessage />

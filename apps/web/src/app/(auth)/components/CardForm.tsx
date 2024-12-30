@@ -42,7 +42,7 @@ export const CardForm = ({ title, hasLogo, children, footer }: Props) => {
             {footer.text}{" "}
             <Link
               href={footer.linkUrl}
-              className="text-success hover:text-success/60 transition-colors"
+              className="text-success transition-colors hover:text-success/60"
             >
               {footer.link}
             </Link>

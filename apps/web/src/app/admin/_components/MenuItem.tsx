@@ -1,6 +1,7 @@
 import { Menu } from "@/app/admin/_interfaces/menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface Props {
   item: Menu;
@@ -28,12 +29,12 @@ const MenuItem = ({ item, onSelectedClick, currentPathname }: Props) => {
           }
         }}
       >
-        <a href={item.href}>
+        <Link href={item.href}>
           {item.icon}
           <span className="flex-1 overflow-hidden overflow-ellipsis">
             {item.text}
           </span>
-        </a>
+        </Link>
       </Button>
     </li>
   );

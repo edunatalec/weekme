@@ -1,13 +1,13 @@
 services:
   database:
     image: postgres:17.2
-    container_name: s3curity_database
+    container_name: weekme_database
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DATABASE}
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT}:5432'
     volumes:
       - database_data:/var/lib/postgresql/data
 

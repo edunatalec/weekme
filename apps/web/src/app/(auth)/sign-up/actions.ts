@@ -1,37 +1,25 @@
 "use server";
 
-import { postApi } from "@/utils/postApi";
+import { SignUpFormData } from "@/app/(auth)/sign-up/schema";
+import http from "@/services/http/http";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-interface User {
-  fullName?: string;
-  email: string;
-  password: string;
-}
-
-export const signUp = async (user: User): Promise<boolean> => {
-  const response = await fetch(postApi("/auth/sign-up"), {
+export const signUp = async (data: SignUpFormData): Promise<void> => {
+  const response = await http.request({
+    endpoint: "auth/sign-up",
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    body: {
+      fullName: data.fullName,
+      email: data.email,
+      password: data.password,
     },
-    body: JSON.stringify({
-      fullName: user?.fullName,
-      email: user.email,
-      password: user.password,
-    }),
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message);
-  }
-
-  (await cookies()).set("token", data.accessToken, {
+  (await cookies()).set("token", response.data.accessToken, {
     httpOnly: true,
     secure: true,
   });
 
-  return data;
+  redirect("/admin");
 };

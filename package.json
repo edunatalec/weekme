@@ -1,11 +1,14 @@
 {
-  "name": "s3curity",
+  "name": "weekme",
   "private": true,
   "scripts": {
+    "prisma:seed": "turbo prisma:seed; npm run docker:down",
+    "prisma:generate": "turbo prisma:generate",
+    "docker:up": "turbo docker:up",
+    "docker:down": "turbo docker:down",
     "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "dev": "turbo dev; npm run docker:down",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
   "devDependencies": {
     "prettier": "^3.2.5",

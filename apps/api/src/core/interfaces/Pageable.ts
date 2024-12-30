@@ -1,5 +1,10 @@
 export interface Pageable<T> {
-  content: T[];
-  totalElements: number;
+  data: T[];
+  meta: Meta;
+}
+
+export interface Meta {
+  count: number;
+  page: number;
   totalPages: number;
 }

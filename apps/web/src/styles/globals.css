@@ -70,7 +70,7 @@
 
   html,
   body {
-    @apply font-roboto h-full min-h-dvh overscroll-none bg-background text-foreground;
+    @apply h-full min-h-dvh overscroll-none bg-background font-roboto text-foreground;
   }
 
   html[data-theme-loading] {
