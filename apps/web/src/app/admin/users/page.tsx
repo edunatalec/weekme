@@ -1,8 +1,9 @@
 "use client";
 
 import { getUsers } from "@/app/admin/users/actions";
+import { usePermission } from "@/hooks/usePermission";
 import { cn } from "@/lib/utils";
-import { Meta, UserEntity } from "@repo/core";
+import { Meta, Module, UserEntity } from "@repo/core";
 import { Ellipsis, Pencil, Trash } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -11,6 +12,7 @@ const Page = () => {
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { hasPermission } = usePermission();
 
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<UserEntity[]>([]);
@@ -151,8 +153,17 @@ const Page = () => {
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <Pencil className="text-blue-500" />
-                    <Trash className="text-red-500" />
+                    {hasPermission<Module.users>({
+                      action: "update",
+                      module: Module.users,
+                      data: user,
+                    }) && <Pencil className="text-blue-500" />}
+
+                    {hasPermission<Module.users>({
+                      action: "delete",
+                      module: Module.users,
+                      data: user,
+                    }) && <Trash className="text-red-500" />}
                   </div>
                 </td>
               </tr>
