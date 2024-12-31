@@ -1,4 +1,4 @@
-import { Module } from "@/hooks/usePermission";
+import { Module } from "@repo/core";
 
 export interface Menu {
   icon: React.ReactElement;

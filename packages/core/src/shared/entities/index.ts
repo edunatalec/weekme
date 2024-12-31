@@ -13,6 +13,6 @@ export type {
   AnimeEntity,
   AnimeScheduleEntity,
   SeasonEntity,
-  AnimeStatus,
   BaseEntity,
 };
+export { AnimeStatus };

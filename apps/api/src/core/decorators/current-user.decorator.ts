@@ -1,9 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { UserEntity } from '@repo/core';
-
-class AuthRequest extends Request {
-  readonly user: UserEntity;
-}
+import { AuthRequest } from 'src/core/guards/auth.guard';
 
 export const CurrentUser = createParamDecorator(
   (_, context: ExecutionContext): UserEntity => {

@@ -2,6 +2,7 @@
 
 import { Menu } from "@/app/admin/_interfaces/menu";
 import { usePermission } from "@/hooks/usePermission";
+import { Module } from "@repo/core";
 import {
   FolderLock,
   LockKeyhole,
@@ -12,30 +13,35 @@ import {
 import { useMemo } from "react";
 
 const menus: Menu[] = [
-  { text: "Usuários", href: "/admin/users", icon: <User />, module: "users" },
+  {
+    text: "Usuários",
+    href: "/admin/users",
+    icon: <User />,
+    module: Module.users,
+  },
   {
     text: "Cargos",
     href: "/admin/roles",
     icon: <FolderLock />,
-    module: "roles",
+    module: Module.roles,
   },
   {
     text: "Permissões",
     href: "/admin/permissions",
     icon: <LockKeyhole />,
-    module: "permissions",
+    module: Module.permissions,
   },
   {
     text: "Animes",
     href: "/admin/animes",
     icon: <TvMinimalPlay />,
-    module: "animes",
+    module: Module.animes,
   },
   {
     text: "Temporadas",
     href: "/admin/seasons",
     icon: <SunSnow />,
-    module: "seasons",
+    module: Module.seasons,
   },
 ];
 

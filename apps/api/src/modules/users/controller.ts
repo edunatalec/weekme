@@ -1,5 +1,5 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
-import { Pageable, UserEntity } from '@repo/core';
+import { Module, Pageable, UserEntity } from '@repo/core';
 import {
   DeleteUserEndpoint,
   GetUserByIdEndpoint,
@@ -18,8 +18,10 @@ import {
 } from 'src/modules/users/exceptions';
 import { SearchUsersQueryDto } from './dtos/search.dto';
 import { UserService } from './service';
+import { PermissionModule } from 'src/core/decorators/permission-module.decorator';
 
 @Controller('users')
+@PermissionModule(Module.users)
 export class UserController {
   constructor(private readonly service: UserService) {}
 

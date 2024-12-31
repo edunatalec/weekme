@@ -6,6 +6,7 @@ import { AuthModule } from 'src/modules/auth/module';
 import { UserModule } from './modules/users/module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/core/guards/auth.guard';
+import { PermissionGuard } from 'src/core/guards/permission.guard';
 
 @Module({
   imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, UserModule],
@@ -14,6 +15,10 @@ import { AuthGuard } from 'src/core/guards/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
     },
   ],
 })
