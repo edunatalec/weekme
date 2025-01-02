@@ -38,7 +38,7 @@ export class AuthService {
     const hashedPassword = await hashPassword(data.password);
 
     const { id: roleId } = await this.prisma.role.findUnique({
-      where: { name: 'Admin' },
+      where: { name: 'User' },
     });
 
     const { id } = await this.prisma.user.create({

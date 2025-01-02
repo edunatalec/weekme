@@ -59,6 +59,8 @@ export class AxiosProvider implements HttpProvider {
         const token = (await cookies()).get("token");
 
         if (token) redirect("/sign-in?logout");
+      } else if (response.status === 403) {
+        redirect("/admin");
       }
 
       return response;

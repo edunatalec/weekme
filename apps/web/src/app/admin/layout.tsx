@@ -4,6 +4,8 @@ import Header from "@/app/admin/_components/Header";
 import Sidebar from "@/app/admin/_components/Sidebar";
 import { useMenus } from "@/app/admin/_hooks/useMenus";
 import { useSession } from "@/contexts/SessionProvider";
+import { usePermission } from "@/hooks/usePermission";
+import { redirect } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
@@ -12,8 +14,15 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const { loading } = useSession();
   const { currentMenu } = useMenus();
+  const { hasPermission } = usePermission();
 
   if (loading) return <div>loading...</div>;
+
+  if (currentMenu) {
+    if (!hasPermission({ action: "view", module: currentMenu.module })) {
+      redirect("/admin");
+    }
+  }
 
   return (
     <div className="flex h-full flex-col">

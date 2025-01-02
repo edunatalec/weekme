@@ -59,7 +59,7 @@ export const useMenus = (): {
     });
   }, [hasPermission]);
 
-  const currentMenu = filteredMenus.find((menu) => menu.href === pathname);
+  const currentMenu = menus.find((menu) => menu.href === pathname);
 
   return { filteredMenus, currentMenu };
 };

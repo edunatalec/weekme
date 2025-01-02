@@ -2,6 +2,7 @@
 
 import { FetchPageableItems } from "@/types/pagination.type";
 import { Meta } from "@repo/core";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -61,7 +62,9 @@ export const usePagination = <T>({
 
       setItems(response.data);
       setMeta(response.meta);
-    } catch (_) {}
+    } catch (error) {
+      if (isRedirectError(error)) throw error;
+    }
   }, [fetchItems, currentPage, search]);
 
   useEffect(() => {

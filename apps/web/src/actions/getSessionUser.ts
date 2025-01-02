@@ -2,6 +2,7 @@
 
 import http from "@/services/http/http";
 import { UserEntity } from "@repo/core";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 
 export const getSessionUser = async (): Promise<UserEntity | null> => {
@@ -16,7 +17,9 @@ export const getSessionUser = async (): Promise<UserEntity | null> => {
     });
 
     return response.data;
-  } catch (_) {
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+
     return null;
   }
 };
