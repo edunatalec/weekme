@@ -19,7 +19,10 @@ import {
 import { SearchUsersQueryDto } from './dtos/search.dto';
 import { UserService } from './service';
 import { PermissionModule } from 'src/core/decorators/permission-module.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Usuários')
 @Controller('users')
 @PermissionModule(Module.users)
 export class UserController {

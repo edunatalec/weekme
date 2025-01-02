@@ -28,7 +28,11 @@ Depois de ter realizado todos os passos anteriores estamos aptos a rodar o proje
 npm run dev
 ```
 
-### Informações adicionais
+### Swagger
+
+Enquanto o projeto estiver em execução, podemos acessar http://localhost:3000/docs para visualizar melhor os endpoints disponíveis.
+
+### Banco de Dados
 
 Para analisar os dados podemos acessar a pasta `apps/api` e executar o comando
 

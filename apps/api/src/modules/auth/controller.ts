@@ -1,4 +1,5 @@
 import { Body, Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { TokenResponse } from '@repo/core';
 import { IsPublic } from 'src/core/decorators/is-public.decorator';
 import { SignInEndpoint, SignUpEndpoint } from 'src/modules/auth/decorators';
@@ -10,6 +11,7 @@ import {
 } from 'src/modules/auth/exceptions';
 import { AuthService } from 'src/modules/auth/service';
 
+@ApiTags('Autenticação')
 @IsPublic()
 @Controller('auth')
 export class AuthController {
