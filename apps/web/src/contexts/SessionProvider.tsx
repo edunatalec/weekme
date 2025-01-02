@@ -24,7 +24,7 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const [user, setUser] = useState<UserEntity | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const updateUser = useCallback(async () => {
     setLoading(true);

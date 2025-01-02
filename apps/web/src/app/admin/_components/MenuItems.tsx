@@ -2,7 +2,7 @@
 
 import MenuItem from "@/app/admin/_components/MenuItem";
 import UserCard from "@/app/admin/_components/UserCard";
-import { useFilteredMenus } from "@/app/admin/_hooks/useFilteredMenus";
+import { useMenus } from "@/app/admin/_hooks/useMenus";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export interface Props {
 
 const MenuItems = ({ onSelectedClick }: Props) => {
   const pathname = usePathname();
-  const filteredMenus = useFilteredMenus();
+  const { filteredMenus } = useMenus();
 
   return (
     <div className="flex flex-1 flex-col gap-2">

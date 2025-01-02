@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { AxiosProvider } from "@/services/http/axios.provider";
 
 export class HttpError extends Error {
@@ -23,11 +21,11 @@ export class HttpError extends Error {
 }
 
 export class HttpResquest {
-  public method: "GET" | "POST" | "PATCH" | "DELETE";
-  public endpoint: string;
-  public body?: any;
-  public params?: { [key: string]: string };
-  public queryParams?: { [key: string]: string };
+  public readonly method: "GET" | "POST" | "PATCH" | "DELETE";
+  public readonly endpoint: string;
+  public readonly body?: any;
+  public readonly params?: { [key: string]: string };
+  public readonly queryParams?: { [key: string]: string };
 
   constructor({ method, endpoint, body, params, queryParams }: HttpResquest) {
     this.method = method;

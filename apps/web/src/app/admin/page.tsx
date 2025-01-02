@@ -1,10 +1,10 @@
 "use client";
 
-import { useFilteredMenus } from "@/app/admin/_hooks/useFilteredMenus";
+import { useMenus } from "@/app/admin/_hooks/useMenus";
 import { Button } from "@/components/ui/button";
 
 const Page = () => {
-  const filteredMenus = useFilteredMenus();
+  const { filteredMenus } = useMenus();
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">

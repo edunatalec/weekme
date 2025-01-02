@@ -10,6 +10,7 @@ import {
   TvMinimalPlay,
   User,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 const menus: Menu[] = [
@@ -45,8 +46,12 @@ const menus: Menu[] = [
   },
 ];
 
-export const useFilteredMenus = () => {
+export const useMenus = (): {
+  filteredMenus: Menu[];
+  currentMenu: Menu | undefined;
+} => {
   const { hasPermission } = usePermission();
+  const pathname = usePathname();
 
   const filteredMenus = useMemo(() => {
     return menus.filter((menu) => {
@@ -54,5 +59,7 @@ export const useFilteredMenus = () => {
     });
   }, [hasPermission]);
 
-  return filteredMenus;
+  const currentMenu = filteredMenus.find((menu) => menu.href === pathname);
+
+  return { filteredMenus, currentMenu };
 };
