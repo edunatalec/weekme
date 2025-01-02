@@ -1,4 +1,3 @@
-import { AnimeScheduleEntity } from 'src/shared/entities/anime-schedule.entity';
 import { BaseEntity } from 'src/shared/entities/base.entity';
 import { SeasonEntity } from 'src/shared/entities/season.entity';
 
@@ -15,6 +14,9 @@ export interface AnimeEntity extends BaseEntity {
   readonly imageUrl: string;
   readonly status: AnimeStatus;
   readonly synopsis: string;
-  readonly schedule: AnimeScheduleEntity;
+  readonly year: number;
+  readonly weekday: number;
+  readonly startDate: Date;
+  readonly finishDate: Date;
   readonly seasons: SeasonEntity[];
 }

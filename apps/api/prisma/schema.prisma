@@ -62,3 +62,51 @@ model Permission {
 
   @@map("permissions")
 }
+
+enum AnimeStatus {
+  FINISHED
+  RELEASING
+  TO_RELEASE
+  HIATUS
+}
+
+model Anime {
+  id            String      @id @default(uuid())
+  imageUrl      String
+  backgroundUrl String?
+  name          String
+  synopsis      String
+  status        AnimeStatus
+  year          Int
+  weekday       Int
+  startDate     DateTime
+  finishDate    DateTime
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  active        Boolean     @default(true)
+  seasons       Season[]    @relation("seasons_on_animes")
+
+  @@index([name])
+  @@map("animes")
+}
+
+enum SeasonName {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+}
+
+model Season {
+  id        String     @id @default(uuid())
+  name      SeasonName
+  year      Int
+  beginAt   DateTime
+  endAt     DateTime
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  active    Boolean    @default(true)
+  animes    Anime[]    @relation("seasons_on_animes")
+
+  @@map("seasons")
+}

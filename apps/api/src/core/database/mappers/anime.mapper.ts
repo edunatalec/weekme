@@ -1,5 +1,4 @@
 import { AnimeEntity } from '@repo/core';
-import { animeScheduleToEntity } from 'src/core/database/mappers/anime-schedule.mapper';
 import { baseToEntity } from 'src/core/database/mappers/base.mapper';
 import { seasonToEntity } from 'src/core/database/mappers/season.mapper';
 
@@ -10,7 +9,10 @@ export const animeToEntity = (anime): AnimeEntity => {
     backgroundUrl: anime.backgroundUrl,
     synopsis: anime.synopsis,
     status: anime.status,
-    schedule: animeScheduleToEntity(anime.schedule),
+    year: anime.year,
+    weekday: anime.weekday,
+    startDate: anime.startDate,
+    finishDate: anime.finishDate,
     seasons: anime.seasons.map((season) => seasonToEntity(season)),
     ...baseToEntity(anime),
   };

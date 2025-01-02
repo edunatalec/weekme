@@ -1,18 +1,16 @@
-import { AnimeScheduleEntity } from 'src/shared/entities/anime-schedule.entity';
 import { AnimeEntity, AnimeStatus } from 'src/shared/entities/anime.entity';
+import { BaseEntity } from 'src/shared/entities/base.entity';
 import { PermissionEntity } from 'src/shared/entities/permission.entity';
 import { RoleEntity } from 'src/shared/entities/role.entity';
-import { SeasonEntity } from 'src/shared/entities/season.entity';
+import { SeasonEntity, SeasonName } from 'src/shared/entities/season.entity';
 import { UserEntity } from 'src/shared/entities/user.entity';
-import { BaseEntity } from 'src/shared/entities/base.entity';
 
+export { AnimeStatus, SeasonName };
 export type {
-  UserEntity,
-  RoleEntity,
-  PermissionEntity,
   AnimeEntity,
-  AnimeScheduleEntity,
-  SeasonEntity,
   BaseEntity,
+  PermissionEntity,
+  RoleEntity,
+  SeasonEntity,
+  UserEntity,
 };
-export { AnimeStatus };
