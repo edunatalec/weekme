@@ -2,87 +2,73 @@ import { Injectable } from '@nestjs/common';
 import { AnimeEntity, Pageable } from '@repo/core';
 import { animeToEntity } from 'src/core/database/mappers/anime.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
-import { PaginationService } from 'src/core/services/pagination.service';
+import {
+  PrismaCrudService,
+  PrismaModule,
+} from 'src/core/services/crud.service';
 import { CreateAnimeBodyDto } from 'src/modules/animes/dtos/create.dto';
 import { SearchAnimesQueryDto } from 'src/modules/animes/dtos/search.dto';
 import { UpdateAnimeBodyDto } from 'src/modules/animes/dtos/update.dto';
 
 @Injectable()
-export class AnimeService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly pagination: PaginationService,
-  ) {}
+export class AnimeService extends PrismaCrudService<PrismaModule.ANIMES> {
+  constructor(prisma: PrismaService) {
+    super(prisma.anime, { seasons: true }, animeToEntity);
+  }
 
-  public async search(
+  public search(
     query: SearchAnimesQueryDto,
-  ): Promise<Pageable<AnimeEntity>> {
-    return this.pagination.search<'anime'>({
-      module: 'anime',
-      mapper: animeToEntity,
+  ): Promise<Pageable<AnimeEntity> | null> {
+    return this._search({
       page: query.page,
       size: query.size,
       orderBy: {
         name: 'asc',
       },
       where: { name: { contains: query.name, mode: 'insensitive' } },
-      include: {
-        seasons: true,
-      },
     });
   }
 
-  public async getById(id: string): Promise<AnimeEntity | null> {
-    const response = await this.prisma.anime.findUnique({
-      where: { id },
-      include: {
-        seasons: true,
-      },
-    });
-
-    return animeToEntity(response);
+  public getById(id: string): Promise<AnimeEntity | null> {
+    return this._getById({ id });
   }
 
-  public async create(body: CreateAnimeBodyDto): Promise<AnimeEntity> {
-    const response = await this.prisma.anime.create({
+  public create(body: CreateAnimeBodyDto): Promise<AnimeEntity> {
+    const { seasonIds, ...data } = body;
+
+    return this._create({
       data: {
-        ...body,
-        startDate: body.startDate ? new Date(body.startDate) : undefined,
-        finishDate: body.finishDate ? new Date(body.finishDate) : undefined,
-      },
-      include: {
-        seasons: true,
+        ...data,
+        startDate: data.startDate ? new Date(data.startDate) : undefined,
+        finishDate: data.finishDate ? new Date(data.finishDate) : undefined,
+        ...(seasonIds && {
+          seasons: {
+            connect: seasonIds.map((id) => ({ id })),
+          },
+        }),
       },
     });
-
-    return animeToEntity(response);
   }
 
-  public async update(
-    id: string,
-    body: UpdateAnimeBodyDto,
-  ): Promise<AnimeEntity> {
-    const response = await this.prisma.anime.update({
-      where: { id },
+  public update(id: string, body: UpdateAnimeBodyDto): Promise<AnimeEntity> {
+    const { seasonIds, ...data } = body;
+
+    return this._update({
+      id,
       data: {
-        ...body,
-        startDate: body.startDate ? new Date(body.startDate) : undefined,
-        finishDate: body.finishDate ? new Date(body.finishDate) : undefined,
-      },
-      include: {
-        seasons: true,
+        ...data,
+        startDate: data.startDate ? new Date(data.startDate) : undefined,
+        finishDate: data.finishDate ? new Date(data.finishDate) : undefined,
+        ...(seasonIds && {
+          seasons: {
+            set: seasonIds.map((id) => ({ id })),
+          },
+        }),
       },
     });
-
-    return animeToEntity(response);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.prisma.anime.update({
-      where: { id },
-      data: {
-        active: false,
-      },
-    });
+    return this._delete({ id });
   }
 }

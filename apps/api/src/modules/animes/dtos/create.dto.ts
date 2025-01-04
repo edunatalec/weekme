@@ -1,11 +1,14 @@
 import { AnimeStatus } from '@repo/core';
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsDateString,
   IsEnum,
   IsInt,
   IsOptional,
   IsString,
   IsUrl,
+  IsUUID,
   MinLength,
 } from 'class-validator';
 
@@ -41,4 +44,10 @@ export class CreateAnimeBodyDto {
   @IsDateString()
   @IsOptional()
   readonly finishDate?: Date;
+
+  // TODO: MUDAR PARA IsUUIDArray()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsUUID('4', { each: true })
+  readonly seasonIds: string[];
 }

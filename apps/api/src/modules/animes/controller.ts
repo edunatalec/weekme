@@ -27,7 +27,7 @@ import { AnimeService } from 'src/modules/animes/service';
 @ApiTags('Animes')
 @Controller('animes')
 @PermissionModule(Module.animes)
-export class AnimesController {
+export class AnimeController {
   constructor(private readonly service: AnimeService) {}
 
   @SearchAnimesEndpoint()

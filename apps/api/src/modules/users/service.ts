@@ -2,78 +2,51 @@ import { Injectable } from '@nestjs/common';
 import { Pageable, UserEntity } from '@repo/core';
 import { userToEntity } from 'src/core/database/mappers/user.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
-import { PaginationService } from 'src/core/services/pagination.service';
+import {
+  PrismaCrudService,
+  PrismaModule,
+} from 'src/core/services/crud.service';
 import { SearchUsersQueryDto } from 'src/modules/users/dtos/search.dto';
 import { UpdateUserBodyDto } from 'src/modules/users/dtos/update.dto';
 
 @Injectable()
-export class UserService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly pagination: PaginationService,
-  ) {}
+export class UserService extends PrismaCrudService<PrismaModule.USERS> {
+  constructor(prisma: PrismaService) {
+    super(
+      prisma.user,
+      {
+        roles: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
+      userToEntity,
+    );
+  }
 
-  public async search(
+  public search(
     query: SearchUsersQueryDto,
   ): Promise<Pageable<UserEntity> | null> {
-    return this.pagination.search<'user'>({
-      module: 'user',
-      mapper: userToEntity,
+    return this._search({
       page: query.page,
       size: query.size,
       orderBy: {
         fullName: 'asc',
       },
       where: { fullName: { contains: query.name, mode: 'insensitive' } },
-      include: {
-        roles: {
-          include: {
-            permissions: true,
-          },
-        },
-      },
     });
   }
 
-  public async getById(id: string): Promise<UserEntity | null> {
-    const response = await this.prisma.user.findUnique({
-      where: { id },
-      include: {
-        roles: {
-          include: {
-            permissions: true,
-          },
-        },
-      },
-    });
-
-    if (response) {
-      return userToEntity(response);
-    }
-
-    return null;
+  public getById(id: string): Promise<UserEntity | null> {
+    return this._getById({ id });
   }
 
-  public async update(
-    id: string,
-    body: UpdateUserBodyDto,
-  ): Promise<UserEntity> {
-    const response = await this.prisma.user.update({
-      where: { id },
-      data: body,
-      include: {
-        roles: {
-          include: {
-            permissions: true,
-          },
-        },
-      },
-    });
-
-    return userToEntity(response);
+  public update(id: string, body: UpdateUserBodyDto): Promise<UserEntity> {
+    return this._update({ id, data: body });
   }
 
   public async delete(id: string): Promise<void> {
-    await this.prisma.user.update({ where: { id }, data: { active: false } });
+    return this._delete({ id });
   }
 }

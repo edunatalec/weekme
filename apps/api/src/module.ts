@@ -8,6 +8,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/core/guards/auth.guard';
 import { PermissionGuard } from 'src/core/guards/permission.guard';
 import { AnimeModule } from 'src/modules/animes/module';
+import { RoleModule } from 'src/modules/roles/module';
+import { PermissionModule } from 'src/modules/permissions/module';
+import { SeasonModule } from 'src/modules/seasons/module';
 
 @Module({
   imports: [
@@ -15,7 +18,10 @@ import { AnimeModule } from 'src/modules/animes/module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    RoleModule,
+    PermissionModule,
     AnimeModule,
+    SeasonModule,
   ],
   controllers: [AppController],
   providers: [
