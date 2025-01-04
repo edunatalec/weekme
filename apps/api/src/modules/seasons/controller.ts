@@ -24,7 +24,7 @@ import {
 import { SeasonService } from 'src/modules/seasons/service';
 
 @ApiBearerAuth()
-@ApiTags('Seasons')
+@ApiTags('Temporadas')
 @Controller('seasons')
 @RequiredResource(ProtectedResource.SEASONS)
 export class SeasonController {
