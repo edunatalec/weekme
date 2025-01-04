@@ -7,9 +7,16 @@ import { UserModule } from './modules/users/module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/core/guards/auth.guard';
 import { PermissionGuard } from 'src/core/guards/permission.guard';
+import { AnimeModule } from 'src/modules/animes/module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, UserModule],
+  imports: [
+    ConfigModule.forRoot(),
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+    AnimeModule,
+  ],
   controllers: [AppController],
   providers: [
     {

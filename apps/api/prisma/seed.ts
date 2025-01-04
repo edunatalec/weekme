@@ -41,6 +41,7 @@ const seedPermissions = async () => {
       name: 'Permissão suprema',
       description: 'Permissão para poder fazer tudo na aplicação',
     },
+
     {
       identifier: 'users:view',
       name: 'Visualizar usuário',

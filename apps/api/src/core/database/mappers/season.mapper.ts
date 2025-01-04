@@ -5,8 +5,7 @@ export const seasonToEntity = (season): SeasonEntity => {
   return {
     name: season.name,
     year: season.year,
-    beginAt: season.beginAt,
-    endAt: season.endAt,
+    show: season.show,
     ...baseToEntity(season),
   };
 };

@@ -53,9 +53,7 @@ const MODULES: {
     view: null,
     create: null,
     update: (sessionUser, user) => {
-      if (sessionUser.id !== user?.id) {
-        return false;
-      }
+      if (!user) return false;
 
       if ('roles' in user) {
         return !userContainsPermission({
@@ -70,7 +68,7 @@ const MODULES: {
       });
     },
     delete: (sessionUser, user) => {
-      if (sessionUser.id !== user?.id) {
+      if (!user || sessionUser.id === user?.id) {
         return false;
       }
 

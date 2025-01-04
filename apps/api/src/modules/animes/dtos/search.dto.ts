@@ -1,3 +1,3 @@
 import { SearchQueryDto } from 'src/core/dtos/search.dto';
 
-export class SearchUsersQueryDto extends SearchQueryDto {}
+export class SearchAnimesQueryDto extends SearchQueryDto {}

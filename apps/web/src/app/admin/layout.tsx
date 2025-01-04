@@ -4,7 +4,6 @@ import Header from "@/app/admin/_components/Header";
 import Sidebar from "@/app/admin/_components/Sidebar";
 import { useMenus } from "@/app/admin/_hooks/useMenus";
 import { useSession } from "@/contexts/SessionProvider";
-import { usePermission } from "@/hooks/usePermission";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -13,13 +12,12 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   const { loading } = useSession();
-  const { currentMenu } = useMenus();
-  const { hasPermission } = usePermission();
+  const { currentMenu, filteredMenus } = useMenus();
 
   if (loading) return <div>loading...</div>;
 
   if (currentMenu) {
-    if (!hasPermission({ action: "view", module: currentMenu.module })) {
+    if (!filteredMenus.includes(currentMenu)) {
       redirect("/admin");
     }
   }

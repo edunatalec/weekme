@@ -10,7 +10,7 @@ import { DeleteUserParamDto } from 'src/modules/users/dtos/delete.dto';
 import { GetUserByIdParamDto } from 'src/modules/users/dtos/get-by-id.dto';
 import {
   UpdateUserBodyDto,
-  UpdateUserParamDto,
+  UpdateUserByIdParamDto,
 } from 'src/modules/users/dtos/update.dto';
 import {
   UserNotFoundException,
@@ -50,7 +50,7 @@ export class UserController {
 
   @UpdateUserEndpoint()
   public async update(
-    @Param() param: UpdateUserParamDto,
+    @Param() param: UpdateUserByIdParamDto,
     @Body() body: UpdateUserBodyDto,
   ): Promise<UserEntity> {
     await this.verifyUserById(param.id);

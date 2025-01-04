@@ -94,6 +94,8 @@ export const usePagination = <T>({
   }, [currentPage, pathname, router]);
 
   const pagination = useMemo<PaginationData[]>(() => {
+    if (meta.totalPages === 0) return [];
+
     const items: PaginationData[] = [];
 
     if (meta.totalPages > 5) {

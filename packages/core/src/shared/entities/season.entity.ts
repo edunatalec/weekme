@@ -10,6 +10,5 @@ export enum SeasonName {
 export interface SeasonEntity extends BaseEntity {
   readonly name: SeasonName;
   readonly year: number;
-  readonly beginAt: Date;
-  readonly endAt: Date;
+  readonly show: boolean;
 }

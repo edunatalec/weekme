@@ -1,30 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { Pageable, UserEntity } from '@repo/core/dist';
+import { Pageable, UserEntity } from '@repo/core';
 import { userToEntity } from 'src/core/database/mappers/user.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
+import { PaginationService } from 'src/core/services/pagination.service';
 import { SearchUsersQueryDto } from 'src/modules/users/dtos/search.dto';
 import { UpdateUserBodyDto } from 'src/modules/users/dtos/update.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly pagination: PaginationService,
+  ) {}
 
   public async search(
     query: SearchUsersQueryDto,
   ): Promise<Pageable<UserEntity> | null> {
-    const skip = (query.page - 1) * query.size;
-
-    const count = await this.prisma.user.count({
-      where: { fullName: { contains: query.name, mode: 'insensitive' } },
-    });
-
-    if (count === 0) {
-      return null;
-    }
-
-    const users = await this.prisma.user.findMany({
-      skip,
-      take: query.size,
+    return this.pagination.search<'user'>({
+      module: 'user',
+      mapper: userToEntity,
+      page: query.page,
+      size: query.size,
       orderBy: {
         fullName: 'asc',
       },
@@ -37,15 +33,6 @@ export class UserService {
         },
       },
     });
-
-    return {
-      data: users.map((user) => userToEntity(user)),
-      meta: {
-        count,
-        page: query.page,
-        totalPages: Math.ceil(count / query.size),
-      },
-    };
   }
 
   public async getById(id: string): Promise<UserEntity | null> {
