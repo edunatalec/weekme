@@ -16,10 +16,8 @@ const Layout = ({ children }: Props) => {
 
   if (loading) return <div>loading...</div>;
 
-  if (currentMenu) {
-    if (!filteredMenus.includes(currentMenu)) {
-      redirect("/admin");
-    }
+  if (currentMenu && !filteredMenus.includes(currentMenu)) {
+    redirect("/admin");
   }
 
   return (

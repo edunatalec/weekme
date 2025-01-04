@@ -1,32 +1,38 @@
 import { applyDecorators, Delete, Get, Patch, Post } from '@nestjs/common';
-import { Module } from '@repo/core';
-import { Action } from 'src/core/decorators/action.decorator';
+import { ProtectedResource } from '@repo/core';
+import { ResourceAction } from 'src/core/decorators/crud-action.decorator';
 
 export const SearchSeasonsEndpoint = () => {
-  return applyDecorators(Get(), Action<Module.seasons>({ action: 'view' }));
+  return applyDecorators(
+    Get(),
+    ResourceAction<ProtectedResource.SEASONS>({ action: 'view' }),
+  );
 };
 
 export const GetSeasonByIdEndpoint = () => {
   return applyDecorators(
     Get(':id'),
-    Action<Module.seasons>({ action: 'view' }),
+    ResourceAction<ProtectedResource.SEASONS>({ action: 'view' }),
   );
 };
 
 export const CreateSeasonEndpoint = () => {
-  return applyDecorators(Post(), Action<Module.seasons>({ action: 'create' }));
+  return applyDecorators(
+    Post(),
+    ResourceAction<ProtectedResource.SEASONS>({ action: 'create' }),
+  );
 };
 
 export const UpdateSeasonEndpoint = () => {
   return applyDecorators(
     Patch(':id'),
-    Action<Module.seasons>({ action: 'update' }),
+    ResourceAction<ProtectedResource.SEASONS>({ action: 'update' }),
   );
 };
 
 export const DeleteSeasonEndpoint = () => {
   return applyDecorators(
     Delete(':id'),
-    Action<Module.seasons>({ action: 'delete' }),
+    ResourceAction<ProtectedResource.SEASONS>({ action: 'delete' }),
   );
 };

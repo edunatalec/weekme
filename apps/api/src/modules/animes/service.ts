@@ -2,10 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { AnimeEntity, Pageable } from '@repo/core';
 import { animeToEntity } from 'src/core/database/mappers/anime.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
-import {
-  PrismaCrudService,
-  PrismaModule,
-} from 'src/core/services/crud.service';
+import { PrismaModule } from 'src/core/services/crud/constants';
+import { PrismaCrudService } from 'src/core/services/crud/service';
 import { CreateAnimeBodyDto } from 'src/modules/animes/dtos/create.dto';
 import { SearchAnimesQueryDto } from 'src/modules/animes/dtos/search.dto';
 import { UpdateAnimeBodyDto } from 'src/modules/animes/dtos/update.dto';

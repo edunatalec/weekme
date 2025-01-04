@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AnimeEntity, Module, Pageable } from '@repo/core';
-import { PermissionModule } from 'src/core/decorators/permission-module.decorator';
+import { AnimeEntity, Pageable, ProtectedResource } from '@repo/core';
+import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   CreateAnimeEndpoint,
   DeleteAnimeEndpoint,
@@ -26,7 +26,7 @@ import { AnimeService } from 'src/modules/animes/service';
 @ApiBearerAuth()
 @ApiTags('Animes')
 @Controller('animes')
-@PermissionModule(Module.animes)
+@RequiredResource(ProtectedResource.ANIMES)
 export class AnimeController {
   constructor(private readonly service: AnimeService) {}
 

@@ -1,5 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
-import { Module, Pageable, UserEntity } from '@repo/core';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Pageable, ProtectedResource, UserEntity } from '@repo/core';
+import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   DeleteUserEndpoint,
   GetUserByIdEndpoint,
@@ -18,13 +20,11 @@ import {
 } from 'src/modules/users/exceptions';
 import { SearchUsersQueryDto } from './dtos/search.dto';
 import { UserService } from './service';
-import { PermissionModule } from 'src/core/decorators/permission-module.decorator';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('Usuários')
 @Controller('users')
-@PermissionModule(Module.users)
+@RequiredResource(ProtectedResource.USERS)
 export class UserController {
   constructor(private readonly service: UserService) {}
 

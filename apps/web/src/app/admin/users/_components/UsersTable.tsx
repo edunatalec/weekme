@@ -1,7 +1,7 @@
 "use client";
 
 import { usePermission } from "@/hooks/usePermission";
-import { Module, UserEntity } from "@repo/core";
+import { ProtectedResource, UserEntity } from "@repo/core";
 import { Pencil, Trash } from "lucide-react";
 
 interface Props {
@@ -45,15 +45,15 @@ export const UsersTable = ({ users }: Props) => {
               </td>
               <td>
                 <div className="flex gap-2">
-                  {hasPermission<Module.users>({
+                  {hasPermission<ProtectedResource.USERS>({
+                    resource: ProtectedResource.USERS,
                     action: "update",
-                    module: Module.users,
                     data: user,
                   }) && <Pencil className="text-blue-500" />}
 
-                  {hasPermission<Module.users>({
+                  {hasPermission<ProtectedResource.USERS>({
+                    resource: ProtectedResource.USERS,
                     action: "delete",
-                    module: Module.users,
                     data: user,
                   }) && <Trash className="text-red-500" />}
                 </div>

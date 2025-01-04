@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Module, Pageable, SeasonEntity } from '@repo/core';
-import { PermissionModule } from 'src/core/decorators/permission-module.decorator';
+import { Pageable, ProtectedResource, SeasonEntity } from '@repo/core';
+import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   CreateSeasonEndpoint,
   DeleteSeasonEndpoint,
@@ -26,7 +26,7 @@ import { SeasonService } from 'src/modules/seasons/service';
 @ApiBearerAuth()
 @ApiTags('Seasons')
 @Controller('seasons')
-@PermissionModule(Module.seasons)
+@RequiredResource(ProtectedResource.SEASONS)
 export class SeasonController {
   constructor(private readonly service: SeasonService) {}
 

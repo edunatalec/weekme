@@ -2,10 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Pageable, SeasonEntity } from '@repo/core';
 import { seasonToEntity } from 'src/core/database/mappers/season.mapper';
 import { PrismaService } from 'src/core/database/prisma.service';
-import {
-  PrismaCrudService,
-  PrismaModule,
-} from 'src/core/services/crud.service';
+import { PrismaModule } from 'src/core/services/crud/constants';
+import { PrismaCrudService } from 'src/core/services/crud/service';
 import { CreateSeasonBodyDto } from 'src/modules/seasons/dtos/create.dto';
 import { SearchSeasonsQueryDto } from 'src/modules/seasons/dtos/search.dto';
 import { UpdateSeasonBodyDto } from 'src/modules/seasons/dtos/update.dto';

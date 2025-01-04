@@ -2,7 +2,8 @@
 
 import { Menu } from "@/app/admin/_interfaces/menu";
 import { usePermission } from "@/hooks/usePermission";
-import { Module } from "@repo/core";
+import { ProtectedResource } from "@repo/core";
+
 import {
   FolderLock,
   LockKeyhole,
@@ -18,31 +19,31 @@ const menus: Menu[] = [
     text: "Usuários",
     href: "/admin/users",
     icon: <User />,
-    module: Module.users,
+    resource: ProtectedResource.USERS,
   },
   {
     text: "Cargos",
     href: "/admin/roles",
     icon: <FolderLock />,
-    module: Module.roles,
+    resource: ProtectedResource.ROLES,
   },
   {
     text: "Permissões",
     href: "/admin/permissions",
     icon: <LockKeyhole />,
-    module: Module.permissions,
+    resource: ProtectedResource.PERMISSIONS,
   },
   {
     text: "Animes",
     href: "/admin/animes",
     icon: <TvMinimalPlay />,
-    module: Module.animes,
+    resource: ProtectedResource.ANIMES,
   },
   {
     text: "Temporadas",
     href: "/admin/seasons",
     icon: <SunSnow />,
-    module: Module.seasons,
+    resource: ProtectedResource.SEASONS,
   },
 ];
 
@@ -55,7 +56,7 @@ export const useMenus = (): {
 
   const filteredMenus = useMemo(() => {
     return menus.filter((menu) => {
-      return hasPermission({ module: menu.module, action: "view" });
+      return hasPermission({ resource: menu.resource, action: "view" });
     });
   }, [hasPermission]);
 

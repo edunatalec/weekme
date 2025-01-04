@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Action, hasPermission, Module } from '@repo/core';
-import { ACTION_KEY } from 'src/core/decorators/action.decorator';
+import { CrudAction, hasPermission, ProtectedResource } from '@repo/core';
+import { RESOURCE_ACTION_KEY } from 'src/core/decorators/crud-action.decorator';
 import { IS_PUBLIC_KEY } from 'src/core/decorators/is-public.decorator';
-import { PERMISSION_MODULE_KEY } from 'src/core/decorators/permission-module.decorator';
+import { REQUIRED_RESOURCE_KEY } from 'src/core/decorators/required-resource.decorator';
 import { getMetadata } from 'src/core/utils/metadata';
 
 @Injectable()
@@ -22,23 +22,23 @@ export class PermissionGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const id = request.params.id;
 
-    const action = getMetadata<Action>({
-      key: ACTION_KEY,
+    const action = getMetadata<CrudAction>({
+      key: RESOURCE_ACTION_KEY,
       reflector: this.reflector,
       context,
     });
 
-    const module = getMetadata<Module>({
-      key: PERMISSION_MODULE_KEY,
+    const resource = getMetadata<ProtectedResource>({
+      key: REQUIRED_RESOURCE_KEY,
       reflector: this.reflector,
       context,
     });
 
-    if (!action || !module) return true;
+    if (!action || !resource) return true;
 
     return hasPermission({
       action,
-      module,
+      resource,
       user: request.user,
       data: id && { id },
     });

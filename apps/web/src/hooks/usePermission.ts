@@ -1,16 +1,16 @@
 "use client";
 
 import { useSession } from "@/contexts/SessionProvider";
-import { hasPermission, TypedModules } from "@repo/core";
+import { hasPermission, ResourceMap } from "@repo/core";
 
-interface HasPermissionProps<Module extends keyof TypedModules> {
-  module: Module;
-  action: TypedModules[Module]["action"];
-  data?: TypedModules[Module]["dataType"];
+interface HasPermissionProps<Resource extends keyof ResourceMap> {
+  resource: Resource;
+  action: ResourceMap[Resource]["action"];
+  data?: ResourceMap[Resource]["dataType"];
 }
 
-type HasPermission = <Module extends keyof TypedModules>(
-  props: HasPermissionProps<Module>,
+type HasPermission = <Resource extends keyof ResourceMap>(
+  props: HasPermissionProps<Resource>,
 ) => boolean;
 
 export const usePermission = (): {
@@ -19,10 +19,11 @@ export const usePermission = (): {
   const { user } = useSession();
 
   return {
-    hasPermission: <M extends keyof TypedModules>({
-      module,
+    hasPermission: <Resource extends keyof ResourceMap>({
+      resource,
       action,
       data,
-    }: HasPermissionProps<M>) => hasPermission({ action, module, data, user }),
+    }: HasPermissionProps<Resource>) =>
+      hasPermission({ action, resource, data, user }),
   };
 };
