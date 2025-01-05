@@ -1,4 +1,4 @@
-import { Anime, Permission, Prisma, Role, Season, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
   AnimeEntity,
   PermissionEntity,
@@ -11,7 +11,7 @@ export type PrismaTypeMap = {
   user: {
     entity: UserEntity;
     include: Prisma.UserInclude;
-    mapper: (value: User) => UserEntity;
+    mapper: (value) => UserEntity;
     search: {
       page: number;
       size: number;
@@ -37,7 +37,7 @@ export type PrismaTypeMap = {
   role: {
     entity: RoleEntity;
     include: Prisma.RoleInclude;
-    mapper: (value: Role) => RoleEntity;
+    mapper: (value) => RoleEntity;
     search: {
       page: number;
       size: number;
@@ -63,7 +63,7 @@ export type PrismaTypeMap = {
   permission: {
     entity: PermissionEntity;
     include: Prisma.PermissionInclude;
-    mapper: (value: Permission) => PermissionEntity;
+    mapper: (value) => PermissionEntity;
     search: {
       page: number;
       size: number;
@@ -89,7 +89,7 @@ export type PrismaTypeMap = {
   anime: {
     entity: AnimeEntity;
     include: Prisma.AnimeInclude;
-    mapper: (value: Anime) => AnimeEntity;
+    mapper: (value) => AnimeEntity;
     search: {
       page: number;
       size: number;
@@ -115,7 +115,7 @@ export type PrismaTypeMap = {
   season: {
     entity: SeasonEntity;
     include: Prisma.SeasonInclude;
-    mapper: (value: Season) => SeasonEntity;
+    mapper: (value) => SeasonEntity;
     search: {
       page: number;
       size: number;

@@ -32,10 +32,8 @@ export class AuthController {
   public async signIn(@Body() body: SignInBodyDto): Promise<TokenResponse> {
     const response = await this.service.signIn(body);
 
-    if (!response) {
-      throw new WrongPasswordOrEmailException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new WrongPasswordOrEmailException();
   }
 }

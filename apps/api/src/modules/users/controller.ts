@@ -20,6 +20,7 @@ import {
 } from 'src/modules/users/exceptions';
 import { SearchUsersQueryDto } from './dtos/search.dto';
 import { UserService } from './service';
+import { CurrentData } from 'src/core/decorators/current-data.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Usuários')
@@ -34,44 +35,43 @@ export class UserController {
   ): Promise<Pageable<UserEntity>> {
     const response = await this.service.search(query);
 
-    if (!response) {
-      throw new UsersNotFoundException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new UsersNotFoundException();
   }
 
   @GetUserByIdEndpoint()
   public async getById(
-    @Param() param: GetUserByIdParamDto,
+    @CurrentData() user: UserEntity | undefined,
+    @Param() _: GetUserByIdParamDto,
   ): Promise<UserEntity | null> {
-    return this.verifyUserById(param.id);
+    return this.verifyUser(user);
   }
 
   @UpdateUserEndpoint()
   public async update(
-    @Param() param: UpdateUserByIdParamDto,
+    @CurrentData() user: UserEntity | undefined,
+    @Param() _: UpdateUserByIdParamDto,
     @Body() body: UpdateUserBodyDto,
   ): Promise<UserEntity> {
-    await this.verifyUserById(param.id);
+    await this.verifyUser(user);
 
-    return this.service.update(param.id, body);
+    return this.service.update(user.id, body);
   }
 
   @DeleteUserEndpoint()
-  public async delete(@Param() param: DeleteUserParamDto): Promise<void> {
-    await this.verifyUserById(param.id);
+  public async delete(
+    @CurrentData() user: UserEntity | undefined,
+    @Param() _: DeleteUserParamDto,
+  ): Promise<void> {
+    await this.verifyUser(user);
 
-    await this.service.delete(param.id);
+    await this.service.delete(user.id);
   }
 
-  private async verifyUserById(id: string): Promise<UserEntity> {
-    const user = await this.service.getById(id);
+  private async verifyUser(user: UserEntity | undefined): Promise<UserEntity> {
+    if (user) return user;
 
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-
-    return user;
+    throw new UserNotFoundException();
   }
 }

@@ -3,12 +3,12 @@ import { UserEntity } from 'src/shared';
 
 interface UserContainsPermissionProps {
   readonly user: UserEntity;
-  readonly requiredPermissions: string[];
+  readonly requiredPermissions?: string[];
 }
 
 export const userContainsPermission = ({
   user,
-  requiredPermissions,
+  requiredPermissions = [],
 }: UserContainsPermissionProps) => {
   return user.roles.some((role) =>
     role.permissions.some((permission) =>

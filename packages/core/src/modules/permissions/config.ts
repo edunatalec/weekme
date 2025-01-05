@@ -5,22 +5,17 @@ import {
 } from 'src/modules/permissions/types';
 
 export const ACCESS_CONTROLS: {
-  [Resource in keyof ResourceMap]: {
-    [CrudAction in ResourceMap[Resource]['action']]: HandleRequiredPermissions<Resource>;
+  [Resource in keyof ResourceMap]?: {
+    [CrudAction in ResourceMap[Resource]['action']]?: HandleRequiredPermissions<Resource>;
   };
 } = {
   users: {
-    view: null,
-    create: null,
     update: (sessionUser, user) => {
       if (!user) return false;
 
-      if ('roles' in user) {
-        return !userContainsPermission({
-          user,
-          requiredPermissions: ['admin'],
-        });
-      }
+      const userHasMasterPermission = userContainsPermission({ user });
+
+      if (userHasMasterPermission) return false;
 
       return userContainsPermission({
         user: sessionUser,
@@ -28,16 +23,11 @@ export const ACCESS_CONTROLS: {
       });
     },
     delete: (sessionUser, user) => {
-      if (!user || sessionUser.id === user?.id) {
-        return false;
-      }
+      if (!user) return false;
 
-      if ('roles' in user) {
-        return !userContainsPermission({
-          user,
-          requiredPermissions: ['admin'],
-        });
-      }
+      const userHasMasterPermission = userContainsPermission({ user });
+
+      if (userHasMasterPermission) return false;
 
       return userContainsPermission({
         user: sessionUser,
@@ -46,26 +36,26 @@ export const ACCESS_CONTROLS: {
     },
   },
   roles: {
-    view: null,
-    create: null,
-    update: null,
-    delete: null,
-  },
-  permissions: {
-    view: null,
-    update: null,
-  },
-  animes: {
-    view: null,
-    create: null,
-    update: null,
-    delete: null,
-  },
-  seasons: {
-    view: null,
-    create: null,
-    update: null,
-    delete: null,
+    update: (sessionUser, role) => {
+      if (!role) return false;
+
+      if (role.name === 'Admin' || role.name === 'User') return false;
+
+      return userContainsPermission({
+        user: sessionUser,
+        requiredPermissions: ['roles:update'],
+      });
+    },
+    delete: (sessionUser, role) => {
+      if (!role) return false;
+
+      if (role.name === 'Admin' || role.name === 'User') return false;
+
+      return userContainsPermission({
+        user: sessionUser,
+        requiredPermissions: ['roles:update'],
+      });
+    },
   },
 };
 

@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Pageable, ProtectedResource, SeasonEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data.decorator';
 import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   CreateSeasonEndpoint,
@@ -36,18 +37,17 @@ export class SeasonController {
   ): Promise<Pageable<SeasonEntity>> {
     const response = await this.service.search(query);
 
-    if (!response) {
-      throw new SeasonsNotFoundException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new SeasonsNotFoundException();
   }
 
   @GetSeasonByIdEndpoint()
   public async getById(
-    @Param() param: GetSeasonByIdParamDto,
+    @CurrentData() season: SeasonEntity | undefined,
+    @Param() _: GetSeasonByIdParamDto,
   ): Promise<SeasonEntity> {
-    return this.verifySeasonById(param.id);
+    return this.verifySeason(season);
   }
 
   @CreateSeasonEndpoint()
@@ -59,28 +59,30 @@ export class SeasonController {
 
   @UpdateSeasonEndpoint()
   public async update(
-    @Param() param: UpdateSeasonByIdParamDto,
+    @CurrentData() season: SeasonEntity | undefined,
+    @Param() _: UpdateSeasonByIdParamDto,
     @Body() body: UpdateSeasonBodyDto,
   ): Promise<SeasonEntity> {
-    await this.verifySeasonById(param.id);
+    await this.verifySeason(season);
 
-    return this.service.update(param.id, body);
+    return this.service.update(season.id, body);
   }
 
   @DeleteSeasonEndpoint()
-  public async delete(@Param() param: DeleteSeasonByIdParamDto): Promise<void> {
-    await this.verifySeasonById(param.id);
+  public async delete(
+    @CurrentData() season: SeasonEntity | undefined,
+    @Param() _: DeleteSeasonByIdParamDto,
+  ): Promise<void> {
+    await this.verifySeason(season);
 
-    await this.service.delete(param.id);
+    await this.service.delete(season.id);
   }
 
-  private async verifySeasonById(id: string): Promise<SeasonEntity> {
-    const season = await this.service.getById(id);
+  private async verifySeason(
+    season: SeasonEntity | undefined,
+  ): Promise<SeasonEntity> {
+    if (season) return season;
 
-    if (!season) {
-      throw new SeasonNotFoundException();
-    }
-
-    return season;
+    throw new SeasonNotFoundException();
   }
 }

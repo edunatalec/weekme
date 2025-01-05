@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Pageable, ProtectedResource, RoleEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data.decorator';
 import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   CreateRoleEndpoint,
@@ -36,18 +37,17 @@ export class RoleController {
   ): Promise<Pageable<RoleEntity>> {
     const response = await this.service.search(query);
 
-    if (!response) {
-      throw new RolesNotFoundException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new RolesNotFoundException();
   }
 
   @GetRoleByIdEndpoint()
   public async getById(
-    @Param() param: GetRoleByIdParamDto,
+    @CurrentData() role: RoleEntity | undefined,
+    @Param() _: GetRoleByIdParamDto,
   ): Promise<RoleEntity> {
-    return this.verifyRoleById(param.id);
+    return this.verifyRole(role);
   }
 
   @CreateRoleEndpoint()
@@ -57,28 +57,28 @@ export class RoleController {
 
   @UpdateRoleEndpoint()
   public async update(
-    @Param() param: UpdateRoleByIdParamDto,
+    @CurrentData() role: RoleEntity | undefined,
+    @Param() _: UpdateRoleByIdParamDto,
     @Body() body: UpdateRoleBodyDto,
   ): Promise<RoleEntity> {
-    await this.verifyRoleById(param.id);
+    await this.verifyRole(role);
 
-    return this.service.update(param.id, body);
+    return this.service.update(role.id, body);
   }
 
   @DeleteRoleEndpoint()
-  public async delete(@Param() param: DeleteRoleByIdParamDto): Promise<void> {
-    await this.verifyRoleById(param.id);
+  public async delete(
+    @CurrentData() role: RoleEntity | undefined,
+    @Param() _: DeleteRoleByIdParamDto,
+  ): Promise<void> {
+    await this.verifyRole(role);
 
-    await this.service.delete(param.id);
+    await this.service.delete(role.id);
   }
 
-  private async verifyRoleById(id: string): Promise<RoleEntity> {
-    const role = await this.service.getById(id);
+  private async verifyRole(role: RoleEntity | undefined): Promise<RoleEntity> {
+    if (role) return role;
 
-    if (!role) {
-      throw new RoleNotFoundException();
-    }
-
-    return role;
+    throw new RoleNotFoundException();
   }
 }

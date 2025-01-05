@@ -23,10 +23,9 @@ export const hasPermission: HasPermission = <
   data,
 }: HasPermissionProps<Resource>): boolean => {
   if (!user) return false;
+  const requiredPermissions = ACCESS_CONTROLS[resource]?.[action];
 
-  const requiredPermissions = ACCESS_CONTROLS[resource][action];
-
-  if (requiredPermissions === null) {
+  if (requiredPermissions === undefined) {
     return userContainsPermission({
       user,
       requiredPermissions: [`${resource}:${action}`],

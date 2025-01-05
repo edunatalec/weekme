@@ -8,29 +8,28 @@ import {
 } from 'src/shared';
 
 export type HandleRequiredPermissions<Resource extends keyof ResourceMap> =
-  | null
   | string[]
   | ((user: UserEntity, data?: ResourceMap[Resource]['dataType']) => boolean);
 
 export type ResourceMap = {
   users: {
-    dataType: UserEntity | Pick<UserEntity, 'id'>;
+    dataType: UserEntity;
     action: CrudAction;
   };
   roles: {
-    dataType: RoleEntity | Pick<RoleEntity, 'id'>;
+    dataType: RoleEntity;
     action: CrudAction;
   };
   permissions: {
-    dataType: PermissionEntity | Pick<PermissionEntity, 'id'>;
+    dataType: PermissionEntity;
     action: 'view' | 'update';
   };
   animes: {
-    dataType: AnimeEntity | Pick<AnimeEntity, 'id'>;
+    dataType: AnimeEntity;
     action: CrudAction;
   };
   seasons: {
-    dataType: SeasonEntity | Pick<SeasonEntity, 'id'>;
+    dataType: SeasonEntity;
     action: CrudAction;
   };
 };

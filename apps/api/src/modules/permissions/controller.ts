@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Pageable, PermissionEntity, ProtectedResource } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data.decorator';
 import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   GetPermissionByIdEndpoint,
@@ -32,37 +33,35 @@ export class PermissionController {
   ): Promise<Pageable<PermissionEntity>> {
     const response = await this.service.search(query);
 
-    if (!response) {
-      throw new PermissionsNotFoundException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new PermissionsNotFoundException();
   }
 
   @GetPermissionByIdEndpoint()
   public async getById(
-    @Param() param: GetPermissionByIdParamDto,
+    @CurrentData() permission: PermissionEntity | undefined,
+    @Param() _: GetPermissionByIdParamDto,
   ): Promise<PermissionEntity> {
-    return this.verifyPermissionById(param.id);
+    return this.verifyPermission(permission);
   }
 
   @UpdatePermissionEndpoint()
   public async update(
-    @Param() param: UpdatePermissionByIdParamDto,
+    @CurrentData() permission: PermissionEntity | undefined,
+    @Param() _: UpdatePermissionByIdParamDto,
     @Body() body: UpdatePermissionBodyDto,
   ): Promise<PermissionEntity> {
-    await this.verifyPermissionById(param.id);
+    await this.verifyPermission(permission);
 
-    return this.service.update(param.id, body);
+    return this.service.update(permission.id, body);
   }
 
-  private async verifyPermissionById(id: string): Promise<PermissionEntity> {
-    const permission = await this.service.getById(id);
+  private async verifyPermission(
+    permission: PermissionEntity | undefined,
+  ): Promise<PermissionEntity> {
+    if (permission) return permission;
 
-    if (!permission) {
-      throw new PermissionNotFoundException();
-    }
-
-    return permission;
+    throw new PermissionNotFoundException();
   }
 }

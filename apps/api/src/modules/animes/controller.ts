@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AnimeEntity, Pageable, ProtectedResource } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data.decorator';
 import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
 import {
   CreateAnimeEndpoint,
@@ -36,18 +37,17 @@ export class AnimeController {
   ): Promise<Pageable<AnimeEntity>> {
     const response = await this.service.search(query);
 
-    if (!response) {
-      throw new AnimesNotFoundException();
-    }
+    if (response) return response;
 
-    return response;
+    throw new AnimesNotFoundException();
   }
 
   @GetAnimeByIdEndpoint()
   public async getById(
-    @Param() param: GetAnimeByIdParamDto,
+    @CurrentData() anime: AnimeEntity | undefined,
+    @Param() _: GetAnimeByIdParamDto,
   ): Promise<AnimeEntity> {
-    return this.verifyAnimeById(param.id);
+    return this.verifyAnime(anime);
   }
 
   @CreateAnimeEndpoint()
@@ -57,28 +57,30 @@ export class AnimeController {
 
   @UpdateAnimeEndpoint()
   public async update(
-    @Param() param: UpdateAnimeByIdParamDto,
+    @CurrentData() anime: AnimeEntity | undefined,
+    @Param() _: UpdateAnimeByIdParamDto,
     @Body() body: UpdateAnimeBodyDto,
   ): Promise<AnimeEntity> {
-    await this.verifyAnimeById(param.id);
+    await this.verifyAnime(anime);
 
-    return this.service.update(param.id, body);
+    return this.service.update(anime.id, body);
   }
 
   @DeleteAnimeEndpoint()
-  public async delete(@Param() param: DeleteAnimeByIdParamDto): Promise<void> {
-    await this.verifyAnimeById(param.id);
+  public async delete(
+    @CurrentData() anime: AnimeEntity | undefined,
+    @Param() _: DeleteAnimeByIdParamDto,
+  ): Promise<void> {
+    await this.verifyAnime(anime);
 
-    await this.service.delete(param.id);
+    await this.service.delete(anime.id);
   }
 
-  private async verifyAnimeById(id: string): Promise<AnimeEntity> {
-    const anime = await this.service.getById(id);
+  private async verifyAnime(
+    anime: AnimeEntity | undefined,
+  ): Promise<AnimeEntity> {
+    if (anime) return anime;
 
-    if (!anime) {
-      throw new AnimeNotFoundException();
-    }
-
-    return anime;
+    throw new AnimeNotFoundException();
   }
 }
