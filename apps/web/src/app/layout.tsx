@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
+import { SessionProvider } from "@/contexts/SessionProvider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning data-theme-loading>
       <body className={roboto.variable}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

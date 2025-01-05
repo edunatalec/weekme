@@ -1,36 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
 import { EmailFormField } from "@/components/EmailFormField";
-import { PasswordFormField } from "@/components/PasswordFormField";
 import { NameFormField } from "@/components/NameFormField";
-import { ConfirmPasswordFormField } from "@/components/ConfirmPassword";
+import { PasswordFormField } from "@/components/PasswordFormField";
 
-import { SignUpFormData, useSignUpForm } from "../schema";
 import { signUp } from "../actions";
+import { SignUpFormData, useSignUpForm } from "../schema";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { useSession } from "@/contexts/SessionProvider";
 
 export const SignUpForm = () => {
   const form = useSignUpForm();
+  const { updateUser } = useSession();
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
       setErrorMessage(null);
+
       await signUp(data);
     } catch (error) {
-      if (error instanceof Error) {
-        return setErrorMessage(error.message);
+      if (isRedirectError(error)) {
+        return updateUser();
       }
 
-      return setErrorMessage("Erro em cadastrar usuário");
-    }
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Ocorreu um erro ao cadastrar usuário. Tente novamente mais tarde.",
+      );
 
-    redirect("/admin");
+      return;
+    }
   };
 
   return (
@@ -39,10 +46,15 @@ export const SignUpForm = () => {
         <div className="mb-6 space-y-4">
           <NameFormField control={form.control} name="fullName" />
           <EmailFormField control={form.control} name="email" />
-          <PasswordFormField control={form.control} name="password" />
-          <ConfirmPasswordFormField
+          <PasswordFormField
+            control={form.control}
+            name="password"
+            label="Senha"
+          />
+          <PasswordFormField
             control={form.control}
             name="confirmPassword"
+            label="Confirmar senha"
           />
 
           {errorMessage && (

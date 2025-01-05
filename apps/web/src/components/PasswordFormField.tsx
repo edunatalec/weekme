@@ -1,5 +1,5 @@
 import { CustomFormField } from "@/components/CustomFormField";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LockKeyholeIcon } from "lucide-react";
 import { useReducer } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -9,6 +9,7 @@ interface Props<
 > {
   control: Control<TFieldValues, TName>;
   name: TName;
+  label: string;
 }
 
 export const PasswordFormField = <
@@ -25,11 +26,12 @@ export const PasswordFormField = <
   return (
     <CustomFormField
       {...form}
-      label="Senha"
+      label={form.label}
       type={showPassword ? "text" : "password"}
-      iconLeft={{
-        onClick: toggleShowPassword,
+      leftIcon={<LockKeyholeIcon />}
+      rightIcon={{
         icon: showPassword ? <Eye /> : <EyeOff />,
+        onClick: toggleShowPassword,
       }}
     />
   );

@@ -12,12 +12,12 @@ const THEME_KEY = "theme";
 
 type Theme = "dark" | "light";
 
-interface ThemeContextState {
+interface ThemeState {
   theme: Theme;
   toggle: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextState | undefined>(undefined);
+const ThemeContext = createContext<ThemeState | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>("light");
@@ -59,6 +59,6 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useTheme = (): ThemeContextState => {
+export const useTheme = (): ThemeState => {
   return useContext(ThemeContext)!;
 };

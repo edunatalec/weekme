@@ -1,35 +1,25 @@
 "use server";
 
-import { postApi } from "@/utils/postApi";
+import { SignInFormData } from "@/app/(auth)/sign-in/schema";
+import http from "@/services/http/http";
+import { TokenResponse } from "@repo/core";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-interface User {
-  email: string;
-  password: string;
-}
-
-export const signIn = async (user: User): Promise<boolean> => {
-  const response = await fetch(postApi("/auth/sign-in"), {
+export const signIn = async (data: SignInFormData): Promise<void> => {
+  const response = await http.request<TokenResponse>({
+    endpoint: "auth/sign-in",
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    body: {
+      email: data.email,
+      password: data.password,
     },
-    body: JSON.stringify({
-      email: user.email,
-      password: user.password,
-    }),
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message);
-  }
-
-  (await cookies()).set("token", data.accessToken, {
+  (await cookies()).set("token", response.data.accessToken, {
     httpOnly: true,
     secure: true,
   });
 
-  return data;
+  redirect("/admin");
 };

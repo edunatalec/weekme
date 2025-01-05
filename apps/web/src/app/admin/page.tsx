@@ -1,7 +1,11 @@
-import { menus } from "@/app/admin/_data/menus";
+"use client";
+
+import { useMenus } from "@/app/admin/_hooks/useMenus";
 import { Button } from "@/components/ui/button";
 
 const Page = () => {
+  const { filteredMenus } = useMenus();
+
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <h1 className="text-center text-3xl">
@@ -11,9 +15,9 @@ const Page = () => {
       </h1>
 
       <div className="flex max-w-sm flex-wrap justify-center gap-2">
-        {menus.map((menu, index) => {
+        {filteredMenus.map((menu, index) => {
           return (
-            <Button variant={"outline"} key={index} asChild>
+            <Button key={index} variant="outline" asChild>
               <a href={menu.href}>{menu.text}</a>
             </Button>
           );
