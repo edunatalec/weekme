@@ -49,7 +49,7 @@ export const usePagination = <T>({
     return Math.max(Number(page) || MIN_PAGE_VALUE, MIN_PAGE_VALUE);
   }, [params]);
 
-  const initialSerchValue = useMemo((): string | undefined => {
+  const initialSearchValue = useMemo((): string | undefined => {
     const search = params.get("search");
 
     if (!search || search.length < 3) return;
@@ -59,9 +59,9 @@ export const usePagination = <T>({
 
   const [loading, setLoading] = useState<boolean>(false);
   const [items, setItems] = useState<T[]>([]);
-  const [search, setSearch] = useState<{ [key: string]: any }>({
-    ...(initialSerchValue && {
-      [searchName]: initialSerchValue,
+  const [searchParams, setSearchParams] = useState<{ [key: string]: any }>({
+    ...(initialSearchValue && {
+      [searchName]: initialSearchValue,
     }),
   });
   const [currentPage, setCurrentPage] = useState<number>(initialPageValue);
@@ -69,6 +69,7 @@ export const usePagination = <T>({
   const [error, setError] = useState<string | null>(null);
 
   const searchTimer = useRef<NodeJS.Timeout>();
+  const oldSearch = useRef<string>();
 
   const updateSearchUrl = useCallback(
     (values: { [key: string]: string }) => {
@@ -97,16 +98,22 @@ export const usePagination = <T>({
     }
 
     searchTimer.current = setTimeout(() => {
-      if (value.length < 3) {
-        setSearch((current) => ({
+      if (value.length > 2 && oldSearch.current !== value) {
+        oldSearch.current = value;
+        setSearchParams((current) => ({ ...current, [searchName]: value }));
+
+        updateSearchUrl({ search: value, page: "1" });
+      } else if (value.length <= 2) {
+        oldSearch.current = undefined;
+        setSearchParams((current) => ({
           ...current,
           [searchName]: undefined,
         }));
-      } else {
-        setSearch((current) => ({ ...current, [searchName]: value }));
+
+        updateSearchUrl({ search: "", page: "1" });
       }
 
-      updateSearchUrl({ search: value });
+      setCurrentPage(1);
     }, 800);
   };
 
@@ -117,7 +124,7 @@ export const usePagination = <T>({
       const response = await fetchItems<T>({
         page: currentPage,
         size: size ?? 10,
-        search,
+        search: searchParams,
       });
 
       setItems(response.data);
@@ -129,7 +136,7 @@ export const usePagination = <T>({
       setItems([]);
       setMeta({ count: 0, page: 0, totalPages: 0 });
     }
-  }, [size, fetchItems, currentPage, search]);
+  }, [size, fetchItems, currentPage, searchParams]);
 
   useEffect(() => {
     (async () => {
@@ -145,7 +152,7 @@ export const usePagination = <T>({
   useEffect(() => {
     updateSearchUrl({
       page: currentPage.toString(),
-      search: search[searchName],
+      search: searchParams[searchName],
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -259,6 +266,6 @@ export const usePagination = <T>({
     canEnablePaginationItem,
     onSearchInputChange,
     error,
-    search: search[searchName],
+    search: searchParams[searchName],
   };
 };

@@ -27,7 +27,7 @@ export const Pagination = ({
 }: PaginationProps) => {
   return (
     <nav className="flex justify-center">
-      <ul className="flex gap-1">
+      <ul className="flex gap-1 overflow-x-auto">
         {items.map((item, key) => {
           const skip = item.type === "skip";
           const active = currentPage === item.value;
