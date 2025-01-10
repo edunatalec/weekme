@@ -9,7 +9,6 @@ export const animeToEntity = (anime): AnimeEntity => {
     backgroundUrl: anime.backgroundUrl,
     synopsis: anime.synopsis,
     status: anime.status,
-    year: anime.year,
     weekday: anime.weekday,
     startDate: anime.startDate,
     finishDate: anime.finishDate,

@@ -74,10 +74,9 @@ model Anime {
   id            String      @id @default(uuid())
   imageUrl      String
   backgroundUrl String?
-  name          String
+  name          String      @unique
   synopsis      String
   status        AnimeStatus
-  year          Int
   weekday       Int
   startDate     DateTime?
   finishDate    DateTime?

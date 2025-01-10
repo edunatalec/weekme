@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 export class AnimesNotFoundException extends NotFoundException {
   constructor() {
@@ -9,5 +9,11 @@ export class AnimesNotFoundException extends NotFoundException {
 export class AnimeNotFoundException extends NotFoundException {
   constructor() {
     super('O anime não foi encontrado.');
+  }
+}
+
+export class AnimeAlreadyRegisteredException extends ConflictException {
+  constructor() {
+    super('Anime com esse nome já cadastrado.');
   }
 }

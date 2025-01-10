@@ -19,6 +19,7 @@ import {
   UpdateAnimeByIdParamDto,
 } from 'src/modules/animes/dtos/update.dto';
 import {
+  AnimeAlreadyRegisteredException,
   AnimeNotFoundException,
   AnimesNotFoundException,
 } from 'src/modules/animes/exceptions';
@@ -52,6 +53,10 @@ export class AnimeController {
 
   @CreateAnimeEndpoint()
   public async create(@Body() body: CreateAnimeBodyDto): Promise<AnimeEntity> {
+    const anime = await this.service.getByName(body.name);
+
+    if (anime) throw new AnimeAlreadyRegisteredException();
+
     return this.service.create(body);
   }
 

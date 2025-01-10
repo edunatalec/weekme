@@ -1,6 +1,5 @@
 import { AnimeStatus } from '@repo/core';
 import {
-  ArrayNotEmpty,
   IsArray,
   IsDateString,
   IsEnum,
@@ -32,9 +31,6 @@ export class CreateAnimeBodyDto {
   readonly synopsis: string;
 
   @IsInt()
-  readonly year: number;
-
-  @IsInt()
   readonly weekday: number;
 
   @IsDateString()
@@ -47,7 +43,7 @@ export class CreateAnimeBodyDto {
 
   // TODO: MUDAR PARA IsUUIDArray()
   @IsArray()
-  @ArrayNotEmpty()
   @IsUUID('4', { each: true })
+  @IsOptional()
   readonly seasonIds: string[];
 }

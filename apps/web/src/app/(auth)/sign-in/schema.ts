@@ -1,13 +1,12 @@
+import { emailValidator } from "@/validators/email";
+import { passwordValidator } from "@/validators/password";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-  email: z.string({ message: "Obrigatório" }).email("E-mail inválido"),
-  password: z
-    .string({ message: "Obrigatório" })
-    .min(8, "Precisa ter no mínimo 8 caracteres")
-    .max(20, "Precisa ter no máximo 20 caracteres"),
+  email: emailValidator,
+  password: passwordValidator,
 });
 
 export type SignInFormData = z.infer<typeof schema>;

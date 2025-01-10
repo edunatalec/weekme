@@ -5,9 +5,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
-import { EmailFormField } from "@/components/EmailFormField";
-import { NameFormField } from "@/components/NameFormField";
-import { PasswordFormField } from "@/components/PasswordFormField";
+import { EmailFormField } from "@/components/form/EmailFormField";
+import { NameFormField } from "@/components/form/NameFormField";
+import { PasswordFormField } from "@/components/form/PasswordFormField";
 
 import { signUp } from "../actions";
 import { SignUpFormData, useSignUpForm } from "../schema";

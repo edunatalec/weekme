@@ -10,7 +10,8 @@ interface Props {
 }
 
 const MenuItem = ({ item, onSelectedClick, currentPathname }: Props) => {
-  const isSelected = currentPathname === item.href;
+  const isSelected = currentPathname.includes(item.href);
+  const isBaseRoute = currentPathname === item.href;
 
   return (
     <li>
@@ -23,10 +24,11 @@ const MenuItem = ({ item, onSelectedClick, currentPathname }: Props) => {
           isSelected && "bg-accent text-accent-foreground",
         )}
         onClick={(e) => {
-          if (isSelected) {
+          if (isBaseRoute) {
             e.preventDefault();
-            onSelectedClick?.();
           }
+
+          onSelectedClick?.();
         }}
       >
         <Link href={item.href}>

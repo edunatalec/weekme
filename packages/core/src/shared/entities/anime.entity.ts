@@ -14,7 +14,6 @@ export interface AnimeEntity extends BaseEntity {
   readonly imageUrl: string;
   readonly status: AnimeStatus;
   readonly synopsis: string;
-  readonly year: number;
   readonly weekday: number;
   readonly startDate: Date;
   readonly finishDate: Date;

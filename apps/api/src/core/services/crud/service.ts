@@ -9,7 +9,7 @@ export class PrismaCrudService<Module extends keyof PrismaTypeMap> {
     protected readonly mapper: PrismaTypeMap[Module]['mapper'],
   ) {}
 
-  private get _delegate(): any {
+  protected get _delegate(): any {
     return this.delegate;
   }
 

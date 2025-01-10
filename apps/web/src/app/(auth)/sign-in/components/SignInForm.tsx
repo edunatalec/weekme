@@ -7,8 +7,8 @@ import { SignInFormData, useSignInForm } from "@/app/(auth)/sign-in/schema";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
-import { EmailFormField } from "@/components/EmailFormField";
-import { PasswordFormField } from "@/components/PasswordFormField";
+import { EmailFormField } from "@/components/form/EmailFormField";
+import { PasswordFormField } from "@/components/form/PasswordFormField";
 
 import { signIn } from "@/app/(auth)/sign-in/actions";
 import { useState } from "react";

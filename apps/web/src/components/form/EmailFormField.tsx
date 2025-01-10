@@ -1,4 +1,4 @@
-import { CustomFormField } from "@/components/CustomFormField";
+import { InputFormField } from "@/components/form/InputFormField";
 import { Mail } from "lucide-react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -17,11 +17,13 @@ export const EmailFormField = <
   form: Props<TFieldValues, TName>,
 ) => {
   return (
-    <CustomFormField
+    <InputFormField
       {...form}
       label="E-mail"
       type="email"
-      leftIcon={<Mail />}
+      icon={{
+        left: <Mail />,
+      }}
     />
   );
 };

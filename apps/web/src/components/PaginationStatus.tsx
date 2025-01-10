@@ -1,12 +1,14 @@
+import { cn } from "@/lib/utils";
 import { Meta } from "@repo/core";
 
 interface Props {
   meta: Meta;
+  className?: string;
 }
 
-export const PaginationStatus = ({ meta }: Props) => {
+export const PaginationStatus = ({ meta, className }: Props) => {
   return (
-    <span className="text-right text-xs">
+    <span className={cn("block text-right text-xs", className)}>
       {"Exibindo "}
       <b>
         {meta.page}-{meta.totalPages}

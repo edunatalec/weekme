@@ -13,6 +13,12 @@ import Link from "next/link";
 
 import logo from "@/assets/logo.svg";
 
+interface FooterProps {
+  text: string;
+  link: string;
+  linkUrl: string;
+}
+
 interface Props {
   hasLogo?: boolean;
   title: string;
@@ -20,15 +26,9 @@ interface Props {
   footer?: FooterProps;
 }
 
-interface FooterProps {
-  text: string;
-  link: string;
-  linkUrl: string;
-}
-
 export const CardForm = ({ title, hasLogo, children, footer }: Props) => {
   return (
-    <Card className="h-full w-full items-center justify-center rounded-none border-none px-6 py-8 md:mx-auto md:my-8 md:h-auto md:max-w-xl md:rounded-lg md:px-16">
+    <Card className="border-non h-full w-full items-center justify-center rounded-none px-6 py-8 md:mx-auto md:my-8 md:h-auto md:max-w-xl md:rounded-lg md:px-16">
       <CardHeader className="mb-6 items-center">
         {hasLogo && <Image src={logo} alt="Logo" priority />}
         <CardTitle className="text-2xl">{title}</CardTitle>

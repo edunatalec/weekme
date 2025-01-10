@@ -20,29 +20,12 @@ export class HttpError extends Error {
   }
 }
 
-export class HttpResquest {
-  public readonly method: "GET" | "POST" | "PATCH" | "DELETE";
-  public readonly endpoint: string;
-  public readonly body?: any;
-  public readonly params?: { [key: string]: string };
-  public readonly queryParams?: { [key: string]: string };
-
-  constructor({ method, endpoint, body, params, queryParams }: HttpResquest) {
-    this.method = method;
-    this.body = body;
-    this.params = params;
-    this.queryParams = queryParams;
-
-    if (params) {
-      for (const key in params) {
-        endpoint.replace(`:${key}`, params[key]);
-      }
-
-      this.endpoint = endpoint;
-    } else {
-      this.endpoint = endpoint;
-    }
-  }
+export interface HttpResquest {
+  readonly method: "GET" | "POST" | "PATCH" | "DELETE";
+  readonly endpoint: string;
+  readonly body?: any;
+  readonly params?: { [key: string]: string };
+  readonly queryParams?: { [key: string]: string };
 }
 
 export interface HttpResponse<T> {

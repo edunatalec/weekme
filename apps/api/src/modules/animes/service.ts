@@ -31,6 +31,19 @@ export class AnimeService extends PrismaCrudService<PrismaModule.ANIMES> {
     return this._getById({ id });
   }
 
+  public async getByName(name: string): Promise<AnimeEntity | null> {
+    const response = await this.delegate.findFirst({
+      where: { name: { equals: name, mode: 'insensitive' } },
+      include: { seasons: true },
+    });
+
+    if (response) {
+      return animeToEntity(response);
+    }
+
+    return null;
+  }
+
   public create(body: CreateAnimeBodyDto): Promise<AnimeEntity> {
     const { seasonIds, ...data } = body;
 

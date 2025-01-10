@@ -12,6 +12,7 @@ export const fetchUsers: FetchPageableItems = async <T = UserEntity>({
   size,
   search,
 }: FetchPageableItemsProps) => {
+  console.log("user");
   const response = await http.request<Pageable<T>>({
     endpoint: "users",
     method: "GET",

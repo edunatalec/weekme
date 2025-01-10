@@ -1,4 +1,4 @@
-import { CustomFormField } from "@/components/CustomFormField";
+import { InputFormField } from "@/components/form/InputFormField";
 import { User } from "lucide-react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
@@ -17,6 +17,13 @@ export const NameFormField = <
   form: Props<TFieldValues, TName>,
 ) => {
   return (
-    <CustomFormField {...form} label="Nome" type="text" leftIcon={<User />} />
+    <InputFormField
+      {...form}
+      label="Nome"
+      type="text"
+      icon={{
+        left: <User />,
+      }}
+    />
   );
 };

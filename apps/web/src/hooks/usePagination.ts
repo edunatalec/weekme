@@ -17,21 +17,27 @@ export interface PaginationData {
 
 interface UsePaginationResponse<T> {
   readonly loading: boolean;
-  readonly fetchingMore: boolean;
   readonly items: T[];
   readonly meta: Meta;
   readonly currentPage: number;
   readonly pagination: PaginationData[];
   readonly onPaginationClick: (page: PaginationData) => void;
   readonly canEnablePaginationItem: (page: PaginationData) => boolean;
+  readonly onSearchInputChange: (e: HTMLInputElement) => void;
+  readonly error: string | null;
+  readonly search: string | undefined;
 }
 
 interface UsePaginationProps {
   readonly fetchItems: FetchPageableItems;
+  readonly size?: number;
+  readonly searchName?: string;
 }
 
 export const usePagination = <T>({
   fetchItems,
+  size,
+  searchName = "name",
 }: UsePaginationProps): UsePaginationResponse<T> => {
   const params = useSearchParams();
   const router = useRouter();
@@ -43,20 +49,74 @@ export const usePagination = <T>({
     return Math.max(Number(page) || MIN_PAGE_VALUE, MIN_PAGE_VALUE);
   }, [params]);
 
+  const initialSerchValue = useMemo((): string | undefined => {
+    const search = params.get("search");
+
+    if (!search || search.length < 3) return;
+
+    return search;
+  }, [params]);
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [fetchingMore, setFetchingMore] = useState<boolean>(false);
   const [items, setItems] = useState<T[]>([]);
-  const [search, setSearch] = useState<{ [key: string]: any }>({});
+  const [search, setSearch] = useState<{ [key: string]: any }>({
+    ...(initialSerchValue && {
+      [searchName]: initialSerchValue,
+    }),
+  });
   const [currentPage, setCurrentPage] = useState<number>(initialPageValue);
   const [meta, setMeta] = useState<Meta>({ count: 0, page: 0, totalPages: 0 });
+  const [error, setError] = useState<string | null>(null);
 
-  const navigated = useRef(false);
+  const searchTimer = useRef<NodeJS.Timeout>();
+
+  const updateSearchUrl = useCallback(
+    (values: { [key: string]: string }) => {
+      const searchParams = new URLSearchParams(params);
+
+      for (const key in values) {
+        const value = values[key];
+
+        if (value) {
+          searchParams.set(key, value);
+        } else {
+          searchParams.delete(key);
+        }
+      }
+
+      router.push(`${pathname}?${searchParams}`);
+    },
+    [router, pathname, params],
+  );
+
+  const onSearchInputChange = (e: HTMLInputElement) => {
+    const value = e.value;
+
+    if (searchTimer.current) {
+      clearTimeout(searchTimer.current);
+    }
+
+    searchTimer.current = setTimeout(() => {
+      if (value.length < 3) {
+        setSearch((current) => ({
+          ...current,
+          [searchName]: undefined,
+        }));
+      } else {
+        setSearch((current) => ({ ...current, [searchName]: value }));
+      }
+
+      updateSearchUrl({ search: value });
+    }, 800);
+  };
 
   const handleFetchItems = useCallback(async () => {
     try {
+      setError(null);
+
       const response = await fetchItems<T>({
         page: currentPage,
-        size: 10,
+        size: size ?? 10,
         search,
       });
 
@@ -64,34 +124,31 @@ export const usePagination = <T>({
       setMeta(response.meta);
     } catch (error) {
       if (isRedirectError(error)) throw error;
+
+      setError((error as Error).message);
+      setItems([]);
+      setMeta({ count: 0, page: 0, totalPages: 0 });
     }
-  }, [fetchItems, currentPage, search]);
+  }, [size, fetchItems, currentPage, search]);
 
   useEffect(() => {
     (async () => {
-      if (navigated.current) {
-        if (currentPage > meta.totalPages) return;
-        setFetchingMore(true);
+      setLoading(true);
 
-        await handleFetchItems();
+      await handleFetchItems();
 
-        setFetchingMore(false);
-
-        navigated.current = false;
-      } else {
-        setLoading(true);
-
-        await handleFetchItems();
-
-        setLoading(false);
-      }
+      setLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleFetchItems]);
 
   useEffect(() => {
-    router.push(`${pathname}?page=${currentPage}`);
-  }, [currentPage, pathname, router]);
+    updateSearchUrl({
+      page: currentPage.toString(),
+      search: search[searchName],
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const pagination = useMemo<PaginationData[]>(() => {
     if (meta.totalPages === 0) return [];
@@ -186,15 +243,13 @@ export const usePagination = <T>({
       }
 
       setCurrentPage(page);
-      navigated.current = true;
 
-      router.push(`${pathname}?page=${page}`);
+      updateSearchUrl({ page: page.toString() });
     },
-    [canEnablePaginationItem, pathname, router, currentPage],
+    [canEnablePaginationItem, updateSearchUrl, currentPage],
   );
 
   return {
-    fetchingMore,
     items,
     loading,
     meta,
@@ -202,5 +257,8 @@ export const usePagination = <T>({
     pagination,
     onPaginationClick,
     canEnablePaginationItem,
+    onSearchInputChange,
+    error,
+    search: search[searchName],
   };
 };

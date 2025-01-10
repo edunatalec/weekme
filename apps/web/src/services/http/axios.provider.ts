@@ -68,6 +68,19 @@ export class AxiosProvider implements HttpProvider {
   }
 
   public async request<T = any>(data: HttpResquest): Promise<HttpResponse<T>> {
+    if (data.params) {
+      let endpoint = data.endpoint;
+
+      for (const key in data.params) {
+        endpoint = endpoint.replace(`:${key}`, data.params[key]);
+      }
+
+      data = {
+        ...data,
+        endpoint,
+      };
+    }
+
     let response: HttpResponse<T>;
 
     switch (data.method) {

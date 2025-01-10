@@ -63,7 +63,6 @@ CREATE TABLE "animes" (
     "name" TEXT NOT NULL,
     "synopsis" TEXT NOT NULL,
     "status" "AnimeStatus" NOT NULL,
-    "year" INTEGER NOT NULL,
     "weekday" INTEGER NOT NULL,
     "startDate" TIMESTAMP(3),
     "finishDate" TIMESTAMP(3),
@@ -128,6 +127,9 @@ CREATE UNIQUE INDEX "roles_name_key" ON "roles"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "permissions_identifier_key" ON "permissions"("identifier");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "animes_name_key" ON "animes"("name");
 
 -- CreateIndex
 CREATE INDEX "animes_name_idx" ON "animes"("name");

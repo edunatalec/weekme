@@ -23,7 +23,7 @@ const Page = () => {
   if (loading) return <span>loading...</span>;
 
   return (
-    <div className="flex h-full flex-col gap-4 pb-4">
+    <div className="flex h-full flex-col gap-4 p-4">
       <UsersTable users={users} />
 
       <PaginationStatus meta={meta} />

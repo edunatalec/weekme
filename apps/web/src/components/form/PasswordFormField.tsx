@@ -1,4 +1,4 @@
-import { CustomFormField } from "@/components/CustomFormField";
+import { InputFormField } from "@/components/form/InputFormField";
 import { Eye, EyeOff, LockKeyholeIcon } from "lucide-react";
 import { useReducer } from "react";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
@@ -24,14 +24,14 @@ export const PasswordFormField = <
   );
 
   return (
-    <CustomFormField
+    <InputFormField
       {...form}
       label={form.label}
       type={showPassword ? "text" : "password"}
-      leftIcon={<LockKeyholeIcon />}
-      rightIcon={{
-        icon: showPassword ? <Eye /> : <EyeOff />,
-        onClick: toggleShowPassword,
+      icon={{
+        left: <LockKeyholeIcon />,
+        right: showPassword ? <Eye /> : <EyeOff />,
+        onRightClick: toggleShowPassword,
       }}
     />
   );
