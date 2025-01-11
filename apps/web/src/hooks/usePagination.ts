@@ -17,6 +17,7 @@ export interface PaginationData {
 
 interface UsePaginationResponse<T> {
   readonly loading: boolean;
+  readonly fetchingMore: boolean;
   readonly items: T[];
   readonly meta: Meta;
   readonly currentPage: number;
@@ -57,7 +58,8 @@ export const usePagination = <T>({
     return search;
   }, [params]);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [fetchingMore, setFetchingMore] = useState<boolean>(false);
   const [items, setItems] = useState<T[]>([]);
   const [searchParams, setSearchParams] = useState<{ [key: string]: any }>({
     ...(initialSearchValue && {
@@ -70,6 +72,7 @@ export const usePagination = <T>({
 
   const searchTimer = useRef<NodeJS.Timeout>();
   const oldSearch = useRef<string>();
+  const navigated = useRef<boolean>(false);
 
   const updateSearchUrl = useCallback(
     (values: { [key: string]: string }) => {
@@ -99,21 +102,25 @@ export const usePagination = <T>({
 
     searchTimer.current = setTimeout(() => {
       if (value.length > 2 && oldSearch.current !== value) {
+        updateSearchUrl({ search: value, page: "1" });
+
         oldSearch.current = value;
+
         setSearchParams((current) => ({ ...current, [searchName]: value }));
 
-        updateSearchUrl({ search: value, page: "1" });
+        setCurrentPage(1);
       } else if (value.length <= 2) {
+        updateSearchUrl({ search: "", page: "1" });
+
         oldSearch.current = undefined;
+
         setSearchParams((current) => ({
           ...current,
           [searchName]: undefined,
         }));
 
-        updateSearchUrl({ search: "", page: "1" });
+        setCurrentPage(1);
       }
-
-      setCurrentPage(1);
     }, 800);
   };
 
@@ -140,11 +147,20 @@ export const usePagination = <T>({
 
   useEffect(() => {
     (async () => {
-      setLoading(true);
+      if (navigated.current) {
+        setFetchingMore(true);
 
-      await handleFetchItems();
+        await handleFetchItems();
 
-      setLoading(false);
+        navigated.current = false;
+        setFetchingMore(false);
+      } else {
+        setLoading(true);
+
+        await handleFetchItems();
+
+        setLoading(false);
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleFetchItems]);
@@ -249,6 +265,8 @@ export const usePagination = <T>({
         page = item.value!;
       }
 
+      navigated.current = true;
+
       setCurrentPage(page);
 
       updateSearchUrl({ page: page.toString() });
@@ -266,6 +284,7 @@ export const usePagination = <T>({
     canEnablePaginationItem,
     onSearchInputChange,
     error,
+    fetchingMore,
     search: searchParams[searchName],
   };
 };

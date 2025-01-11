@@ -1,3 +1,4 @@
+import { urlValidator } from "@/validators/url.validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimeEntity } from "@repo/core";
 import { useForm } from "react-hook-form";
@@ -12,9 +13,9 @@ const schema = z.object({
   backgroundUrl: z.preprocess(
     (value) =>
       typeof value === "string" && value.trim() === "" ? undefined : value,
-    z.string().url().optional(),
+    urlValidator.optional(),
   ),
-  imageUrl: z.string({ message: "Obrigatório" }).url(),
+  imageUrl: urlValidator,
   status: AnimeStatus,
   synopsis: z.string({ message: "Obrigatório" }).min(3),
   weekday: z.preprocess(

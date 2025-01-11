@@ -8,13 +8,8 @@ import { InputFormField } from "@/components/form/InputFormField";
 import { SelectFormField } from "@/components/form/SelectFormField";
 import { TextAreaFormField } from "@/components/form/TextAreaFormField";
 import { Form } from "@/components/ui/form";
-import { urlValidator } from "@/validators/url";
-import {
-  AnimeEntity,
-  AnimeStatus,
-  getStatusName,
-  getWeekdayName,
-} from "@repo/core";
+import { urlValidator } from "@/validators/url.validator";
+import { AnimeEntity, AnimeStatus, getStatusName, WEEKDAYS } from "@repo/core";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -137,9 +132,9 @@ export const AnimeForm = ({ anime }: Props) => {
               control={form.control}
               name="weekday"
               label="Dia da semana"
-              items={Array.from({ length: 7 }, (_, i) => i).map((weekday) => ({
-                key: weekday.toString(),
-                value: getWeekdayName(weekday),
+              items={WEEKDAYS.map((weekday: string, i: number) => ({
+                key: i.toString(),
+                value: weekday,
               }))}
             />
 

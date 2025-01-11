@@ -14,8 +14,9 @@ import Link from "next/link";
 
 const Page = () => {
   const {
-    loading,
     items: animes,
+    loading,
+    fetchingMore,
     pagination,
     meta,
     currentPage,
@@ -54,9 +55,17 @@ const Page = () => {
 
       {!error && !loading && (
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4 pt-2 md:p-0 md:pb-4">
-          <div className="flex-1 md:overflow-y-auto md:px-4 md:py-2">
-            <AnimeCards animes={animes} />
-          </div>
+          {fetchingMore && (
+            <Center className="flex-1">
+              <Loader />
+            </Center>
+          )}
+
+          {!fetchingMore && (
+            <div className="flex-1 md:overflow-y-auto md:px-4 md:py-2">
+              <AnimeCards animes={animes} />
+            </div>
+          )}
 
           <PaginationStatus meta={meta} className="md:px-4" />
 

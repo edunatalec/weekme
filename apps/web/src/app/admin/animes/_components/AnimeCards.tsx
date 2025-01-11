@@ -7,7 +7,7 @@ interface Props {
 
 export const AnimeCards = ({ animes }: Props) => {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
       {animes.map((anime) => (
         <AnimeCard key={anime.id} anime={anime} />
       ))}

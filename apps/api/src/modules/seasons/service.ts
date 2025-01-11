@@ -23,6 +23,7 @@ export class SeasonService extends PrismaCrudService<PrismaModule.SEASONS> {
       orderBy: {
         name: 'asc',
       },
+      where: { year: query.year },
     });
   }
 

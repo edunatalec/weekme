@@ -1,6 +1,6 @@
-import { emailValidator } from "@/validators/email";
-import { fullNameValidator } from "@/validators/fullName";
-import { passwordValidator } from "@/validators/password";
+import { emailValidator } from "@/validators/email.validator";
+import { fullNameValidator } from "@/validators/full-name.validator";
+import { passwordValidator } from "@/validators/password.validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

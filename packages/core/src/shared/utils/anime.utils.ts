@@ -1,15 +1,17 @@
 import { AnimeStatus } from 'src/shared/entities';
 
+export const WEEKDAYS = [
+  'Domingo',
+  'Segunda-feira',
+  'Terça-feira',
+  'Quarta-feira',
+  'Quinta-feira',
+  'Sexta-feira',
+  'Sábado',
+];
+
 export const getWeekdayName = (weekday: number): string => {
-  return [
-    'Domingo',
-    'Segunda-feira',
-    'Terça-feira',
-    'Quarta-feira',
-    'Quinta-feira',
-    'Sexta-feira',
-    'Sábado',
-  ][weekday];
+  return WEEKDAYS[weekday];
 };
 
 export const getStatusName = (status: AnimeStatus): string => {
