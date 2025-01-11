@@ -1,34 +1,18 @@
-"use client";
-
 import { AnimeForm } from "@/app/admin/animes/_components/AnimeForm";
 import { getAnimeById } from "@/app/admin/animes/actions";
-import { AnimeEntity } from "@repo/core";
-import { isRedirectError } from "next/dist/client/components/redirect";
-import React, { useEffect, useRef, useState } from "react";
 
-const Page = ({ params }: { params: any }) => {
-  const { id }: { id: string } = React.use(params);
-  const [loading, setLoading] = useState<boolean>(true);
+interface Props {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-  const anime = useRef<AnimeEntity>();
+const Page = async ({ params }: Props) => {
+  const { id } = await params;
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
+  const anime = await getAnimeById(id);
 
-      try {
-        anime.current = await getAnimeById(id);
-      } catch (error) {
-        if (isRedirectError(error)) throw error;
-      }
-
-      setLoading(false);
-    })();
-  }, []);
-
-  if (loading) return <div>loading...</div>;
-
-  return <AnimeForm anime={anime.current} />;
+  return <AnimeForm anime={anime} />;
 };
 
 export default Page;

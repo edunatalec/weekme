@@ -13,7 +13,7 @@ const schema = z.object({
   backgroundUrl: z.preprocess(
     (value) =>
       typeof value === "string" && value.trim() === "" ? undefined : value,
-    urlValidator.optional(),
+    z.string().url().optional(),
   ),
   imageUrl: urlValidator,
   status: AnimeStatus,

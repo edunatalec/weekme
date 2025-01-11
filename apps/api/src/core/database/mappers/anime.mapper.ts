@@ -6,12 +6,12 @@ export const animeToEntity = (anime): AnimeEntity => {
   return {
     name: anime.name,
     imageUrl: anime.imageUrl,
-    backgroundUrl: anime.backgroundUrl,
+    backgroundUrl: anime.backgroundUrl || undefined,
     synopsis: anime.synopsis,
     status: anime.status,
     weekday: anime.weekday,
-    startDate: anime.startDate,
-    finishDate: anime.finishDate,
+    startDate: anime.startDate || undefined,
+    finishDate: anime.finishDate || undefined,
     seasons: anime.seasons.map((season) => seasonToEntity(season)),
     ...baseToEntity(anime),
   };

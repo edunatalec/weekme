@@ -7,7 +7,7 @@ export const userToEntity = (user): UserEntity => {
     fullName: user.fullName,
     email: user.email,
     roles: user.roles.map((role) => roleToEntity(role)),
-    avatarUrl: user.avatarUrl,
+    avatarUrl: user.avatarUrl || undefined,
     ...baseToEntity(user),
   };
 };

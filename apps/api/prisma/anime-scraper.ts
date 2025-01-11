@@ -54,9 +54,9 @@ const main = async () => {
 };
 
 const getAnime = async (browser: Browser, link: string, weekday: number) => {
-  try {
-    const page = await browser.newPage();
+  const page = await browser.newPage();
 
+  try {
     await page.goto(link, {
       waitUntil: 'domcontentloaded',
     });
@@ -93,9 +93,10 @@ const getAnime = async (browser: Browser, link: string, weekday: number) => {
     await prisma.anime.create({ data: anime });
 
     console.log('Anime:', anime.name, 'criado com sucesso!');
-
+  } catch (_) {
+  } finally {
     await page.close();
-  } catch (_) {}
+  }
 };
 
 main();

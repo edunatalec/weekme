@@ -69,6 +69,7 @@ const Page = () => {
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Ano</th>
+                    <th>Exibindo</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -83,7 +84,15 @@ const Page = () => {
                       </td>
                       <td>{getSeasonName(season.name)}</td>
                       <td>{season.year}</td>
-                      <td>Editar</td>
+                      <td>{season.show ? "Sim" : "Não"}</td>
+                      <td>
+                        <Link
+                          href={`seasons/${season.id}/edit`}
+                          className="text-primary underline-offset-4 hover:underline"
+                        >
+                          Editar
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

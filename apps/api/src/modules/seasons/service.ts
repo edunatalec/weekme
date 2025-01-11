@@ -20,9 +20,17 @@ export class SeasonService extends PrismaCrudService<PrismaModule.SEASONS> {
     return this._search({
       page: query.page,
       size: query.size,
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: [
+        {
+          show: 'desc',
+        },
+        {
+          name: 'asc',
+        },
+        {
+          year: 'desc',
+        },
+      ],
       where: { year: query.year },
     });
   }

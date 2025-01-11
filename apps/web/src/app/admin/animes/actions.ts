@@ -36,7 +36,7 @@ export const getAnimeById = async (id: string): Promise<AnimeEntity> => {
   return response.data;
 };
 
-export const createAnime = async (anime: AnimeFormData) => {
+export const createAnime = async (anime: AnimeFormData): Promise<void> => {
   await http.request({
     endpoint: "animes",
     method: "POST",
@@ -44,7 +44,10 @@ export const createAnime = async (anime: AnimeFormData) => {
   });
 };
 
-export const updateAnime = async (id: string, anime: AnimeFormData) => {
+export const updateAnime = async (
+  id: string,
+  anime: AnimeFormData,
+): Promise<void> => {
   await http.request({
     endpoint: "animes/:id",
     method: "PATCH",

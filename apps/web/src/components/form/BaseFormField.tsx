@@ -25,9 +25,9 @@ export type FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  label: string;
-  description?: string;
-  className?: string;
+  readonly label: string;
+  readonly description?: string;
+  readonly className?: string;
 } & BaseFormFieldProps<TFieldValues, TName>;
 
 export type Props<
