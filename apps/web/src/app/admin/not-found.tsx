@@ -1,9 +1,11 @@
+import { Center } from "@/components/Center";
+
 const NotFound = () => {
   return (
-    <div>
+    <Center className="h-full flex-col text-center">
       <p>Parece que essa página não existe.</p>
       <p>Tente acessar outra página pelo menu</p>
-    </div>
+    </Center>
   );
 };
 

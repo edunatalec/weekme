@@ -1,15 +1,15 @@
 import { AnimeStatus } from '@repo/core';
 import {
-  IsArray,
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
   IsOptional,
   IsString,
   IsUrl,
-  IsUUID,
   MinLength,
 } from 'class-validator';
+import { IsUUIDArray } from 'src/core/decorators/is-uuid-array';
 
 export class CreateAnimeBodyDto {
   @IsString()
@@ -41,9 +41,11 @@ export class CreateAnimeBodyDto {
   @IsOptional()
   readonly finishDate?: Date;
 
-  // TODO: MUDAR PARA IsUUIDArray()
-  @IsArray()
-  @IsUUID('4', { each: true })
+  @IsUUIDArray()
   @IsOptional()
   readonly seasonIds: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  readonly active?: boolean;
 }

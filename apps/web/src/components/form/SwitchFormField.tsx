@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { FieldPath, FieldValues } from "react-hook-form";
@@ -41,6 +42,7 @@ export const SwitchFormField = <
               <Switch checked={field.value} onCheckedChange={field.onChange} />
             </FormControl>
           </div>
+          <FormMessage />
         </FormItem>
       )}
     />

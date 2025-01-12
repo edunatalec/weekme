@@ -3,27 +3,15 @@
 import { useSession } from "@/contexts/SessionProvider";
 import { hasPermission, ResourceMap } from "@repo/core";
 
-interface HasPermissionProps<Resource extends keyof ResourceMap> {
-  resource: Resource;
-  action: ResourceMap[Resource]["action"];
-  data?: ResourceMap[Resource]["dataType"];
-}
-
-type HasPermission = <Resource extends keyof ResourceMap>(
-  props: HasPermissionProps<Resource>,
-) => boolean;
-
-export const usePermission = (): {
-  hasPermission: HasPermission;
-} => {
+export const usePermission = <Resource extends keyof ResourceMap>(
+  resource: Resource,
+) => {
   const { user } = useSession();
 
   return {
-    hasPermission: <Resource extends keyof ResourceMap>({
-      resource,
-      action,
-      data,
-    }: HasPermissionProps<Resource>) =>
-      hasPermission({ action, resource, data, user }),
+    hasPermission: (
+      action: ResourceMap[Resource]["action"],
+      data?: ResourceMap[Resource]["dataType"],
+    ) => hasPermission({ action, resource, data, user }),
   };
 };

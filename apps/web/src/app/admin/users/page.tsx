@@ -1,40 +1,98 @@
 "use client";
 
-import { UsersTable } from "@/app/admin/users/_components/UsersTable";
-import { fetchUsers } from "@/app/admin/users/actions";
-import { Pagination } from "@/components/Pagination";
-import { PaginationStatus } from "@/components/PaginationStatus";
-import { usePagination } from "@/hooks/usePagination";
-import { UserEntity } from "@repo/core";
+import { SearchModule } from "@/components/SearchModule";
+import { Column, SearchTable } from "@/components/SearchTable";
+import { Button } from "@/components/ui/button";
+import { usePaginatedSearch } from "@/hooks/usePaginatedSearch";
+import { usePermission } from "@/hooks/usePermission";
+
+import { ProtectedResource, UserEntity } from "@repo/core";
+import Link from "next/link";
 
 const Page = () => {
-  const {
-    loading,
-    items: users,
-    pagination,
-    meta,
-    currentPage,
-    onPaginationClick,
-    canEnablePaginationItem,
-  } = usePagination<UserEntity>({
-    fetchItems: fetchUsers,
+  const { hasPermission } = usePermission<ProtectedResource.USERS>(
+    ProtectedResource.USERS,
+  );
+
+  const paginatedSearch = usePaginatedSearch<UserEntity>({
+    resource: ProtectedResource.USERS,
+    size: 20,
   });
 
-  if (loading) return <span>loading...</span>;
+  const columns: Column<UserEntity>[] = [
+    {
+      name: "ID",
+      key: "id",
+    },
+    {
+      name: "Nome",
+      key: "fullName",
+    },
+    {
+      name: "Status",
+      key: "active",
+      render: (item) => (item.active ? "Ativo" : "Desativado"),
+    },
+    {
+      name: "Cargos",
+      key: "roles",
+      render: (item) => (
+        <div className="flex flex-wrap gap-1 py-2">
+          {item.roles.map((role) => (
+            <div
+              key={role.id}
+              className="rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground"
+            >
+              {role.name}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      render: (item) => {
+        if (!hasPermission("update", item)) return;
+
+        return (
+          <Link
+            href={`roles/${item.id}/edit`}
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Editar
+          </Link>
+        );
+      },
+    },
+    {
+      render: (item) => {
+        if (
+          (item.active && !hasPermission("delete", item)) ||
+          (!item.active && !hasPermission("update", item))
+        )
+          return;
+
+        return (
+          <Button
+            variant="link"
+            size="auto"
+            onClick={() => paginatedSearch.toggleActiveStatus(item)}
+          >
+            {item.active ? "Desativar" : "Ativar"}
+          </Button>
+        );
+      },
+    },
+  ];
 
   return (
-    <div className="flex h-full flex-col gap-4 p-4">
-      <UsersTable users={users} />
-
-      <PaginationStatus meta={meta} />
-
-      <Pagination
-        canEnablePaginationItem={canEnablePaginationItem}
-        currentPage={currentPage}
-        items={pagination}
-        onPaginationClick={onPaginationClick}
-      />
-    </div>
+    <SearchModule
+      paginatedSearch={paginatedSearch}
+      search={{
+        placeholder: "Pesquise: Ana...",
+      }}
+    >
+      <SearchTable data={paginatedSearch.items} columns={columns} />
+    </SearchModule>
   );
 };
 

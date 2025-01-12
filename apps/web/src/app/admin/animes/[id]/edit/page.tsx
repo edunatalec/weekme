@@ -1,5 +1,6 @@
 import { AnimeForm } from "@/app/admin/animes/_components/AnimeForm";
-import { getAnimeById } from "@/app/admin/animes/actions";
+import { getById } from "@/services/crud/service";
+import { AnimeEntity, ProtectedResource } from "@repo/core";
 
 interface Props {
   params: Promise<{
@@ -10,7 +11,10 @@ interface Props {
 const Page = async ({ params }: Props) => {
   const { id } = await params;
 
-  const anime = await getAnimeById(id);
+  const anime = await getById<AnimeEntity>({
+    id,
+    resource: ProtectedResource.ANIMES,
+  });
 
   return <AnimeForm anime={anime} />;
 };

@@ -1,12 +1,16 @@
 "use client";
 
-import { createSeason, updateSeason } from "@/app/admin/seasons/actions";
 import { useSeasonForm } from "@/app/admin/seasons/schema";
 import { BaseForm } from "@/components/form/BaseForm";
 import { InputFormField } from "@/components/form/InputFormField";
 import { SelectFormField } from "@/components/form/SelectFormField";
 import { SwitchFormField } from "@/components/form/SwitchFormField";
-import { getSeasonName, SeasonEntity, SeasonName } from "@repo/core";
+import {
+  getSeasonName,
+  ProtectedResource,
+  SeasonEntity,
+  SeasonName,
+} from "@repo/core";
 
 interface Props {
   season?: SeasonEntity;
@@ -16,12 +20,7 @@ export const SeasonsForm = ({ season }: Props) => {
   const form = useSeasonForm(season);
 
   return (
-    <BaseForm
-      {...form}
-      id={season?.id}
-      create={createSeason}
-      update={updateSeason}
-    >
+    <BaseForm {...form} id={season?.id} resource={ProtectedResource.SEASONS}>
       <h1 className="text-2xl">
         Preencha o formulário para {season ? "atualizar" : "cadastrar"} uma
         temporada

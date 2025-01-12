@@ -1,6 +1,14 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { usePermission } from "@/hooks/usePermission";
+import { create, update } from "@/services/crud/service";
+import { ProtectedResource } from "@repo/core";
+import {
+  isRedirectError,
+  redirect,
+} from "next/dist/client/components/redirect";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, FormProviderProps } from "react-hook-form";
@@ -11,8 +19,8 @@ type Props<
   TTransformedValues extends FieldValues | undefined = undefined,
 > = {
   readonly id?: string;
-  readonly create?: (data: TFieldValues) => Promise<void>;
-  readonly update?: (id: string, data: TFieldValues) => Promise<void>;
+  readonly item?: TFieldValues;
+  readonly resource: ProtectedResource;
 } & FormProviderProps<TFieldValues, TContext, TTransformedValues>;
 
 export const BaseForm = <
@@ -21,22 +29,30 @@ export const BaseForm = <
   TTransformedValues extends FieldValues | undefined = undefined,
 >({
   id,
-  create,
-  update,
+  item,
+  resource,
   children,
   ...form
 }: Props<TFieldValues, TContext, TTransformedValues>) => {
+  const { hasPermission } = usePermission(resource);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
+  if (
+    (item && !hasPermission("update", item as any)) ||
+    (!item && !hasPermission("create", item as any))
+  ) {
+    redirect("/admin");
+  }
 
   const onSubmit = async (data: TFieldValues) => {
     try {
       setError(null);
 
       if (id) {
-        await update!(id, data);
+        await update({ id, data, resource });
       } else {
-        await create!(data);
+        await create({ data, resource });
       }
 
       router.back();

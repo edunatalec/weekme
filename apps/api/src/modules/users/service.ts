@@ -41,7 +41,19 @@ export class UserService extends PrismaCrudService<PrismaModule.USERS> {
   }
 
   public update(id: string, body: UpdateUserBodyDto): Promise<UserEntity> {
-    return this._update({ id, data: body });
+    const { roleIds, ...data } = body;
+
+    return this._update({
+      id,
+      data: {
+        ...data,
+        ...(roleIds && {
+          roles: {
+            set: roleIds.map((id) => ({ id })),
+          },
+        }),
+      },
+    });
   }
 
   public async delete(id: string): Promise<void> {

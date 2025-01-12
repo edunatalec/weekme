@@ -28,6 +28,7 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         menu: "h-10 rounded-md px-2",
         icon: "size-8",
+        auto: "h-auto w-auto",
       },
     },
     defaultVariants: {

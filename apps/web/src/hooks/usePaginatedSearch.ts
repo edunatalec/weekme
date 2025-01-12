@@ -1,7 +1,11 @@
 "use client";
 
-import { FetchPageableItems } from "@/types/pagination.type";
-import { Meta } from "@repo/core";
+import {
+  remove,
+  search as searchService,
+  update,
+} from "@/services/crud/service";
+import { BaseEntity, Meta, ProtectedResource } from "@repo/core";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -15,31 +19,33 @@ export interface PaginationData {
   value?: number;
 }
 
-interface UsePaginationResponse<T> {
+export interface UsePaginatedSearchResponse<T> {
   readonly loading: boolean;
   readonly fetchingMore: boolean;
   readonly items: T[];
   readonly meta: Meta;
   readonly currentPage: number;
   readonly pagination: PaginationData[];
-  readonly onPaginationClick: (page: PaginationData) => void;
-  readonly canEnablePaginationItem: (page: PaginationData) => boolean;
-  readonly onSearchInputChange: (e: HTMLInputElement) => void;
   readonly error: string | null;
   readonly search: string | undefined;
+
+  readonly onPaginationClick: (page: PaginationData) => void;
+  readonly canEnablePaginationItem: (page: PaginationData) => boolean;
+  readonly onSearchChange: (value: string) => void;
+  readonly toggleActiveStatus: (value: T) => Promise<void>;
 }
 
-interface UsePaginationProps {
-  readonly fetchItems: FetchPageableItems;
+interface UsePaginatedSearchProps {
+  readonly resource: ProtectedResource;
   readonly size?: number;
   readonly searchName?: string;
 }
 
-export const usePagination = <T>({
-  fetchItems,
+export const usePaginatedSearch = <T extends BaseEntity>({
+  resource,
   size,
   searchName = "name",
-}: UsePaginationProps): UsePaginationResponse<T> => {
+}: UsePaginatedSearchProps): UsePaginatedSearchResponse<T> => {
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -53,29 +59,43 @@ export const usePagination = <T>({
   const initialSearchValue = useMemo((): string | undefined => {
     const search = params.get("search");
 
-    if (!search || search.length < 3) return;
+    if (!search) return;
 
     return search;
   }, [params]);
 
+  const initialFiltersValue = useMemo((): { [key: string]: string } => {
+    let filters = {};
+
+    if (initialSearchValue) {
+      filters = {
+        ...filters,
+        ...{
+          [searchName]: initialSearchValue,
+        },
+      };
+    }
+
+    return filters;
+  }, [initialSearchValue, searchName]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchingMore, setFetchingMore] = useState<boolean>(false);
   const [items, setItems] = useState<T[]>([]);
-  const [searchParams, setSearchParams] = useState<{ [key: string]: any }>({
-    ...(initialSearchValue && {
-      [searchName]: initialSearchValue,
-    }),
-  });
   const [currentPage, setCurrentPage] = useState<number>(initialPageValue);
   const [meta, setMeta] = useState<Meta>({ count: 0, page: 0, totalPages: 0 });
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>(initialSearchValue || "");
+  const [filters, setFilters] = useState<{ [key: string]: string }>(
+    initialFiltersValue,
+  );
 
   const searchTimer = useRef<NodeJS.Timeout>();
   const oldSearch = useRef<string>();
   const navigated = useRef<boolean>(false);
 
-  const updateSearchUrl = useCallback(
-    (values: { [key: string]: string }) => {
+  const updateUrlSearchParams = useCallback(
+    (values: { [key: string]: string | undefined }) => {
       const searchParams = new URLSearchParams(params);
 
       for (const key in values) {
@@ -93,45 +113,80 @@ export const usePagination = <T>({
     [router, pathname, params],
   );
 
-  const onSearchInputChange = (e: HTMLInputElement) => {
-    const value = e.value;
+  const onSearchChange = (value: string) => {
+    setSearch(value);
 
-    if (searchTimer.current) {
-      clearTimeout(searchTimer.current);
+    value = value.trim();
+
+    if (value.length === 0) {
+      return clearSearch();
     }
 
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+
     searchTimer.current = setTimeout(() => {
-      if (value.length > 2 && oldSearch.current !== value) {
-        updateSearchUrl({ search: value, page: "1" });
+      if (oldSearch.current !== value) {
+        updateUrlSearchParams({ search: value, page: "1" });
 
         oldSearch.current = value;
 
-        setSearchParams((current) => ({ ...current, [searchName]: value }));
+        setFilters((current) => ({ ...current, [searchName]: value }));
 
         setCurrentPage(1);
-      } else if (value.length <= 2) {
-        updateSearchUrl({ search: "", page: "1" });
-
-        oldSearch.current = undefined;
-
-        setSearchParams((current) => ({
-          ...current,
-          [searchName]: undefined,
-        }));
-
-        setCurrentPage(1);
+      } else if (value.length === 0) {
+        clearSearch();
       }
     }, 800);
+  };
+
+  const clearSearch = () => {
+    clearTimeout(searchTimer.current);
+
+    updateUrlSearchParams({ search: "", page: "1" });
+
+    oldSearch.current = undefined;
+
+    setFilters((current) => {
+      const { [searchName]: _, ...filters } = current;
+
+      return filters;
+    });
+
+    setCurrentPage(1);
+  };
+
+  const toggleActiveStatus = async ({ id, active }: T) => {
+    setFetchingMore(true);
+
+    try {
+      if (active) {
+        await remove({ id, resource });
+      } else {
+        await update({
+          id,
+          data: { active: true },
+          resource,
+        });
+      }
+    } catch (error) {
+      // TODO: Aparecer uma mensagem toast
+      if (isRedirectError(error)) throw error;
+    }
+
+    await handleFetchItems();
+
+    setFetchingMore(false);
   };
 
   const handleFetchItems = useCallback(async () => {
     try {
       setError(null);
 
-      const response = await fetchItems<T>({
+      const response = await searchService<T>({
         page: currentPage,
         size: size ?? 10,
-        search: searchParams,
+        filters,
+        resource,
       });
 
       setItems(response.data);
@@ -143,7 +198,7 @@ export const usePagination = <T>({
       setItems([]);
       setMeta({ count: 0, page: 0, totalPages: 0 });
     }
-  }, [size, fetchItems, currentPage, searchParams]);
+  }, [size, resource, currentPage, filters]);
 
   useEffect(() => {
     (async () => {
@@ -166,9 +221,9 @@ export const usePagination = <T>({
   }, [handleFetchItems]);
 
   useEffect(() => {
-    updateSearchUrl({
+    updateUrlSearchParams({
       page: currentPage.toString(),
-      search: searchParams[searchName],
+      search: filters[searchName],
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -269,9 +324,9 @@ export const usePagination = <T>({
 
       setCurrentPage(page);
 
-      updateSearchUrl({ page: page.toString() });
+      updateUrlSearchParams({ page: page.toString() });
     },
-    [canEnablePaginationItem, updateSearchUrl, currentPage],
+    [canEnablePaginationItem, updateUrlSearchParams, currentPage],
   );
 
   return {
@@ -282,9 +337,10 @@ export const usePagination = <T>({
     pagination,
     onPaginationClick,
     canEnablePaginationItem,
-    onSearchInputChange,
+    onSearchChange,
     error,
     fetchingMore,
-    search: searchParams[searchName],
+    search,
+    toggleActiveStatus,
   };
 };

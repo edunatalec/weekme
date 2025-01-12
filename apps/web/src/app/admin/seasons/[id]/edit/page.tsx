@@ -1,6 +1,6 @@
 import { SeasonsForm } from "@/app/admin/seasons/_components/SeasonsForm";
-import { getSeasonById } from "@/app/admin/seasons/actions";
-import React from "react";
+import { getById } from "@/services/crud/service";
+import { ProtectedResource, SeasonEntity } from "@repo/core";
 
 interface Props {
   params: Promise<{
@@ -11,7 +11,10 @@ interface Props {
 const Page = async ({ params }: Props) => {
   const { id } = await params;
 
-  const season = await getSeasonById(id);
+  const season = await getById<SeasonEntity>({
+    id,
+    resource: ProtectedResource.SEASONS,
+  });
 
   return <SeasonsForm season={season} />;
 };

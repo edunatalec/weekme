@@ -1,8 +1,8 @@
 "use client";
 
 import { Menu } from "@/app/admin/_interfaces/menu";
-import { usePermission } from "@/hooks/usePermission";
-import { ProtectedResource } from "@repo/core";
+import { useSession } from "@/contexts/SessionProvider";
+import { hasPermission, ProtectedResource } from "@repo/core";
 
 import {
   FolderLock,
@@ -51,14 +51,15 @@ export const useMenus = (): {
   filteredMenus: Menu[];
   currentMenu: Menu | undefined;
 } => {
-  const { hasPermission } = usePermission();
+  const { user } = useSession();
+
   const pathname = usePathname();
 
   const filteredMenus = useMemo(() => {
     return menus.filter((menu) => {
-      return hasPermission({ resource: menu.resource, action: "view" });
+      return hasPermission({ action: "view", resource: menu.resource, user });
     });
-  }, [hasPermission]);
+  }, [user]);
 
   const currentMenu = menus.find((menu) => menu.href === pathname);
 

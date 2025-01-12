@@ -1,6 +1,5 @@
 "use client";
 
-import { createAnime, updateAnime } from "@/app/admin/animes/actions";
 import { useAnimeForm } from "@/app/admin/animes/schema";
 import { BaseForm } from "@/components/form/BaseForm";
 import { DatePickerFormField } from "@/components/form/DatePickerFormField";
@@ -8,7 +7,13 @@ import { InputFormField } from "@/components/form/InputFormField";
 import { SelectFormField } from "@/components/form/SelectFormField";
 import { TextAreaFormField } from "@/components/form/TextAreaFormField";
 import { urlValidator } from "@/validators/url.validator";
-import { AnimeEntity, AnimeStatus, getStatusName, WEEKDAYS } from "@repo/core";
+import {
+  AnimeEntity,
+  AnimeStatus,
+  getStatusName,
+  ProtectedResource,
+  WEEKDAYS,
+} from "@repo/core";
 import Image from "next/image";
 
 interface Props {
@@ -22,12 +27,7 @@ export const AnimeForm = ({ anime }: Props) => {
   const backgroundUrl = form.watch("backgroundUrl");
 
   return (
-    <BaseForm
-      {...form}
-      id={anime?.id}
-      create={createAnime}
-      update={updateAnime}
-    >
+    <BaseForm {...form} id={anime?.id} resource={ProtectedResource.ANIMES}>
       <h1 className="text-2xl">
         Preencha o formulário para {anime ? "atualizar" : "cadastrar"} um anime
       </h1>

@@ -22,13 +22,13 @@ export class SeasonService extends PrismaCrudService<PrismaModule.SEASONS> {
       size: query.size,
       orderBy: [
         {
+          year: 'desc',
+        },
+        {
           show: 'desc',
         },
         {
           name: 'asc',
-        },
-        {
-          year: 'desc',
         },
       ],
       where: { year: query.year },

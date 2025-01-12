@@ -11,4 +11,8 @@ export class CreateSeasonBodyDto {
   @IsBoolean()
   @IsOptional()
   readonly show?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly active?: boolean;
 }

@@ -1,4 +1,5 @@
-import { AnimeEntity, getWeekdayName } from "@repo/core";
+import { usePermission } from "@/hooks/usePermission";
+import { AnimeEntity, getWeekdayName, ProtectedResource } from "@repo/core";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,12 +8,21 @@ interface Props {
 }
 
 export const AnimeCard = ({ anime }: Props) => {
+  const { hasPermission } = usePermission<ProtectedResource.ANIMES>(
+    ProtectedResource.ANIMES,
+  );
+
   return (
     <Link
       href={`animes/${anime.id}/edit`}
+      onClick={(e) => {
+        if (!hasPermission("update", anime)) {
+          e.preventDefault();
+        }
+      }}
       className="flex flex-col gap-1 transition-transform duration-300 ease-in-out hover:scale-[1.03]"
     >
-      <div className="relative h-[270px] w-full">
+      <div className="relative h-[260px] w-full">
         <Image
           src={anime.imageUrl}
           layout="fill"

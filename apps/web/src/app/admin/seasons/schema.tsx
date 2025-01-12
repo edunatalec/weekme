@@ -25,6 +25,7 @@ export const useSeasonForm = (season?: SeasonEntity) => {
       ? {
           name: season.name,
           year: season.year,
+          show: season.show,
         }
       : {},
   });

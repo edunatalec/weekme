@@ -1,6 +1,6 @@
 "use client";
 
-import { PaginationData, PaginationType } from "@/hooks/usePagination";
+import { PaginationData, PaginationType } from "@/hooks/usePaginatedSearch";
 import { cn } from "@/lib/utils";
 import { Ellipsis } from "lucide-react";
 import { ReactNode } from "react";

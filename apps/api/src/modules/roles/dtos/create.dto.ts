@@ -1,10 +1,5 @@
-import {
-  ArrayNotEmpty,
-  IsArray,
-  IsString,
-  IsUUID,
-  MinLength,
-} from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsUUIDArray } from 'src/core/decorators/is-uuid-array';
 
 export class CreateRoleBodyDto {
   @IsString()
@@ -15,9 +10,11 @@ export class CreateRoleBodyDto {
   @MinLength(3)
   readonly description: string;
 
-  // TODO: MUDAR PARA IsUUIDArray()
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsUUID('4', { each: true })
+  @IsUUIDArray()
+  @IsOptional()
   readonly permissionIds: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  readonly active?: boolean;
 }
