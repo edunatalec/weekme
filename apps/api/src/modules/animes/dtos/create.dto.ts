@@ -7,13 +7,11 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  MinLength,
 } from 'class-validator';
 import { IsUUIDArray } from 'src/core/decorators/is-uuid-array';
 
 export class CreateAnimeBodyDto {
   @IsString()
-  @MinLength(3)
   readonly name: string;
 
   @IsUrl()
@@ -27,7 +25,6 @@ export class CreateAnimeBodyDto {
   readonly status: AnimeStatus;
 
   @IsString()
-  @MinLength(3)
   readonly synopsis: string;
 
   @IsInt()

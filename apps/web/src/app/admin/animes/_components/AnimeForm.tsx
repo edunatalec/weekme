@@ -4,17 +4,22 @@ import { useAnimeForm } from "@/app/admin/animes/schema";
 import { BaseForm } from "@/components/form/BaseForm";
 import { DatePickerFormField } from "@/components/form/DatePickerFormField";
 import { InputFormField } from "@/components/form/InputFormField";
+import { MultiSelectFormField } from "@/components/form/MultiSelectFormField";
 import { SelectFormField } from "@/components/form/SelectFormField";
 import { TextAreaFormField } from "@/components/form/TextAreaFormField";
+import { search } from "@/services/crud/service";
 import { urlValidator } from "@/validators/url.validator";
 import {
   AnimeEntity,
   AnimeStatus,
+  getSeasonName,
   getStatusName,
   ProtectedResource,
+  SeasonEntity,
   WEEKDAYS,
 } from "@repo/core";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Props {
   anime?: AnimeEntity;
@@ -23,8 +28,26 @@ interface Props {
 export const AnimeForm = ({ anime }: Props) => {
   const form = useAnimeForm(anime);
 
+  const [seasons, setSeasons] = useState<SeasonEntity[]>([]);
+
   const imageUrl = form.watch("imageUrl");
   const backgroundUrl = form.watch("backgroundUrl");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await search<SeasonEntity>({
+          resource: ProtectedResource.SEASONS,
+          size: 50,
+          page: 1,
+        });
+
+        setSeasons(response.data);
+      } catch (_) {
+        setSeasons([]);
+      }
+    })();
+  }, []);
 
   return (
     <BaseForm {...form} id={anime?.id} resource={ProtectedResource.ANIMES}>
@@ -127,6 +150,18 @@ export const AnimeForm = ({ anime }: Props) => {
           label="Data fim"
         />
       </div>
+
+      {seasons && (
+        <MultiSelectFormField
+          control={form.control}
+          name="seasonIds"
+          label="Temporadas"
+          items={seasons.map((season) => ({
+            id: season.id,
+            value: getSeasonName(season.name) + " " + season.year,
+          }))}
+        />
+      )}
     </BaseForm>
   );
 };

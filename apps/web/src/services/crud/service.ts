@@ -7,7 +7,7 @@ interface SearchParams {
   resource: ProtectedResource;
   page: number;
   size: number;
-  filters: { [key: string]: string };
+  filters?: { [key: string]: string };
 }
 
 export const search = async <T>({

@@ -39,7 +39,7 @@ export const ACCESS_CONTROLS: {
     update: (sessionUser, role) => {
       if (!role) return false;
 
-      if (role.name.match(/^(Admin|User)$/)) return false;
+      if (role.name.match(/^(Admin)$/)) return false;
 
       return userContainsPermission({
         user: sessionUser,
@@ -49,7 +49,7 @@ export const ACCESS_CONTROLS: {
     delete: (sessionUser, role) => {
       if (!role) return false;
 
-      if (role.name.match(/^(Admin|User)$/)) return false;
+      if (role.name.match(/^(Admin)$/)) return false;
 
       return userContainsPermission({
         user: sessionUser,
