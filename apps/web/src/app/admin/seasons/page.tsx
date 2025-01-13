@@ -30,6 +30,10 @@ const Page = () => {
       render: (item) => getSeasonName(item.name),
     },
     {
+      name: "Ano",
+      key: "year",
+    },
+    {
       name: "Exibindo",
       key: "show",
       render: (season) => (season.show ? "Sim" : "Não"),
