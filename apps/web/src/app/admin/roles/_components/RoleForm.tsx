@@ -57,7 +57,7 @@ export const RoleForm = ({ role }: Props) => {
         <MultiSelectFormField
           control={form.control}
           name="permissionIds"
-          label="Temporadas"
+          label="Permissões"
           items={permissions.map((permission) => ({
             id: permission.id,
             value: permission.name,

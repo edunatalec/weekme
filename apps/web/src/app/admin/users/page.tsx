@@ -55,7 +55,7 @@ const Page = () => {
 
         return (
           <Link
-            href={`roles/${item.id}/edit`}
+            href={`users/${item.id}/edit`}
             className="text-primary underline-offset-4 hover:underline"
           >
             Editar
