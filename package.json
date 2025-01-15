@@ -2,13 +2,13 @@
   "name": "weekme",
   "private": true,
   "scripts": {
-    "prisma:seed": "turbo prisma:seed; npm run docker:down",
-    "prisma:push": "turbo prisma:push; npm run docker:down",
+    "prisma:seed": "turbo prisma:seed & npm run docker:down",
+    "prisma:push": "turbo prisma:push & npm run docker:down",
     "prisma:generate": "turbo prisma:generate",
     "docker:up": "turbo docker:up",
     "docker:down": "turbo docker:down",
     "build": "turbo build",
-    "dev": "turbo dev; npm run docker:down",
+    "dev": "turbo dev & npm run docker:down",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ type Props<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   title: string;
-  description: string;
+  description?: string;
   className?: string;
 } & BaseFormFieldProps<TFieldValues, TName>;
 
