@@ -12,7 +12,7 @@ export const getSessionUser = async (): Promise<UserEntity | null> => {
 
   try {
     const response = await http.request({
-      endpoint: "me",
+      endpoint: "profile",
       method: "GET",
     });
 
