@@ -6,10 +6,10 @@ export const fullNameValidator = z.string({ message: "Obrigatório" }).refine(
 
     const hasTwoWords = words.length >= 2;
 
-    return hasTwoWords && words.every((word) => word.length >= 3);
+    return hasTwoWords && words.some((word) => word.length >= 3);
   },
   {
     message:
-      "Precisa ter no mínimo duas palavras, e cada palavra deve ter pelo menos 3 caracteres",
+      "O texto deve conter pelo menos duas palavras, sendo que uma delas deve ter no mínimo três caracteres.",
   },
 );
