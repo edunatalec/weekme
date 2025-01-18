@@ -53,7 +53,13 @@ const main = async () => {
   await browser.close();
 };
 
-const getAnime = async (browser: Browser, link: string, weekday: number) => {
+const getAnime = async (
+  browser: Browser,
+  link: string | undefined,
+  weekday: number,
+) => {
+  if (!link) return;
+
   const page = await browser.newPage();
 
   try {
@@ -81,8 +87,8 @@ const getAnime = async (browser: Browser, link: string, weekday: number) => {
 
     const anime: Prisma.AnimeCreateInput = {
       name: $('.header .content h1').text().trim(),
-      imageUrl: $('.header img').attr('src').trim(),
-      backgroundUrl: backgroundUrl && backgroundUrl.match(/url\("(.+?)"\)/)[1],
+      imageUrl: $('.header img').attr('src')!.trim(),
+      backgroundUrl: backgroundUrl && backgroundUrl.match(/url\("(.+?)"\)/)![1],
       status: STATUS_MAP[status] || AnimeStatus.TO_RELEASE,
       synopsis: $('.header .description').text().trim(),
       weekday,

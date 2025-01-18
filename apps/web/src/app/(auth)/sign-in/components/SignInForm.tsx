@@ -11,12 +11,14 @@ import { EmailFormField } from "@/components/form/EmailFormField";
 import { PasswordFormField } from "@/components/form/PasswordFormField";
 
 import { signIn } from "@/app/(auth)/sign-in/actions";
-import { useState } from "react";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import { useSession } from "@/contexts/SessionProvider";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export const SignInForm = () => {
   const form = useSignInForm();
+  const searchParams = useSearchParams();
   const { updateUser } = useSession();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -25,7 +27,7 @@ export const SignInForm = () => {
     try {
       setErrorMessage(null);
 
-      await signIn(data);
+      await signIn(data, searchParams.get("redirect_to"));
     } catch (error) {
       if (isRedirectError(error)) {
         return updateUser();
@@ -56,7 +58,7 @@ export const SignInForm = () => {
         </div>
 
         <Link
-          href="/reset-password"
+          href="/forgot-password"
           className="mb-4 mt-2 block text-end text-neutral-400"
         >
           Esqueceu a senha?

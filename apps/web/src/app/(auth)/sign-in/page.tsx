@@ -1,7 +1,7 @@
 import { CardForm } from "@/app/(auth)/components/CardForm";
 import { SignInForm } from "./components/SignInForm";
 
-const SignInPage = () => {
+const Page = () => {
   return (
     <CardForm
       hasLogo
@@ -17,4 +17,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default Page;

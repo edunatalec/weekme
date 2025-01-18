@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Pageable, UserEntity } from '@repo/core';
 import { userToEntity } from 'src/core/database/mappers/user.mapper';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { PrismaModule } from 'src/core/services/crud/constants';
 import { PrismaCrudService } from 'src/core/services/crud/service';
-import { SearchUsersQueryDto } from 'src/modules/users/dtos/search.dto';
-import { UpdateUserBodyDto } from 'src/modules/users/dtos/update.dto';
+import { SearchUsersQueryDto } from 'src/modules/users/dtos/search';
+import { UpdateUserBodyDto } from 'src/modules/users/dtos/update';
 
 @Injectable()
 export class UserService extends PrismaCrudService<PrismaModule.USERS> {

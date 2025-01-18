@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Pageable, RoleEntity } from '@repo/core';
 import { roleToEntity } from 'src/core/database/mappers/role.mapper';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { PrismaModule } from 'src/core/services/crud/constants';
 import { PrismaCrudService } from 'src/core/services/crud/service';
-import { CreateRoleBodyDto } from 'src/modules/roles/dtos/create.dto';
-import { SearchRolesQueryDto } from 'src/modules/roles/dtos/search.dto';
+import { CreateRoleBodyDto } from 'src/modules/roles/dtos/create';
+import { SearchRolesQueryDto } from 'src/modules/roles/dtos/search';
 import { UpdateRoleBodyDto } from 'src/modules/roles/dtos/update.dto';
 
 @Injectable()

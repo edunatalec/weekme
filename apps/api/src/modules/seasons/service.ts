@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Pageable, SeasonEntity } from '@repo/core';
 import { seasonToEntity } from 'src/core/database/mappers/season.mapper';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { PrismaModule } from 'src/core/services/crud/constants';
 import { PrismaCrudService } from 'src/core/services/crud/service';
-import { CreateSeasonBodyDto } from 'src/modules/seasons/dtos/create.dto';
-import { SearchSeasonsQueryDto } from 'src/modules/seasons/dtos/search.dto';
-import { UpdateSeasonBodyDto } from 'src/modules/seasons/dtos/update.dto';
+import { CreateSeasonBodyDto } from 'src/modules/seasons/dtos/create';
+import { SearchSeasonsQueryDto } from 'src/modules/seasons/dtos/search';
+import { UpdateSeasonBodyDto } from 'src/modules/seasons/dtos/update';
 
 @Injectable()
 export class SeasonService extends PrismaCrudService<PrismaModule.SEASONS> {

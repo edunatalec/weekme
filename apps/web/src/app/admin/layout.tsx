@@ -3,6 +3,8 @@
 import Header from "@/app/admin/_components/Header";
 import Sidebar from "@/app/admin/_components/Sidebar";
 import { useMenus } from "@/app/admin/_hooks/useMenus";
+import { Center } from "@/components/Center";
+import { Loader } from "@/components/Loader";
 import { useSession } from "@/contexts/SessionProvider";
 import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
@@ -15,7 +17,12 @@ const Layout = ({ children }: Props) => {
   const { loading } = useSession();
   const { currentMenu, filteredMenus } = useMenus();
 
-  if (loading) return <div>loading...</div>;
+  if (loading)
+    return (
+      <Center className="h-full">
+        <Loader />
+      </Center>
+    );
 
   if (currentMenu && !filteredMenus.includes(currentMenu)) {
     redirect("/admin");

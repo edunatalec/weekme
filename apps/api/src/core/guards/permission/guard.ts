@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { CrudAction, hasPermission, ProtectedResource } from '@repo/core';
-import { PrismaService } from 'src/core/database/prisma.service';
-import { RESOURCE_ACTION_KEY } from 'src/core/decorators/crud-action.decorator';
-import { IS_PUBLIC_KEY } from 'src/core/decorators/is-public.decorator';
-import { REQUIRED_RESOURCE_KEY } from 'src/core/decorators/required-resource.decorator';
+import { PrismaService } from 'src/core/database/service';
+import { RESOURCE_ACTION_KEY } from 'src/core/decorators/crud-action';
+import { IS_PUBLIC_KEY } from 'src/core/decorators/is-public';
+import { REQUIRED_RESOURCE_KEY } from 'src/core/decorators/required-resource';
 import {
   PERMISSION_MAP,
   RESOURCE_TO_PRISMA_MODULE,

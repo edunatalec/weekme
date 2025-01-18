@@ -1,5 +1,5 @@
 import { Pageable } from '@repo/core';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { PrismaTypeMap } from 'src/core/services/crud/types';
 
 export class PrismaCrudService<Module extends keyof PrismaTypeMap> {

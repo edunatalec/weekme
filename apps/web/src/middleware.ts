@@ -23,7 +23,7 @@ export const middleware = async (request: NextRequest) => {
   } else {
     route = hasBlockedRoute({
       pathname,
-      fallbackRoute: "/sign-in",
+      fallbackRoute: `/sign-in?redirect_to=${encodeURIComponent(pathname + search)}`,
       blockedRoutes: ["/admin"],
     });
   }

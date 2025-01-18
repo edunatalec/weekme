@@ -1,33 +1,29 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Pageable, ProtectedResource, SeasonEntity } from '@repo/core';
-import { CurrentData } from 'src/core/decorators/current-data.decorator';
-import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
+import { Body, Param, Query } from '@nestjs/common';
+import { Pageable, SeasonEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data';
 import {
   CreateSeasonEndpoint,
   DeleteSeasonEndpoint,
   GetSeasonByIdEndpoint,
   SearchSeasonsEndpoint,
+  SeasonControllerDecorators,
   UpdateSeasonEndpoint,
 } from 'src/modules/seasons/decorators';
-import { CreateSeasonBodyDto } from 'src/modules/seasons/dtos/create.dto';
-import { DeleteSeasonByIdParamDto } from 'src/modules/seasons/dtos/delete.dto';
-import { GetSeasonByIdParamDto } from 'src/modules/seasons/dtos/get-by-id.dto';
-import { SearchSeasonsQueryDto } from 'src/modules/seasons/dtos/search.dto';
+import { CreateSeasonBodyDto } from 'src/modules/seasons/dtos/create';
+import { DeleteSeasonByIdParamDto } from 'src/modules/seasons/dtos/delete';
+import { GetSeasonByIdParamDto } from 'src/modules/seasons/dtos/get-by-id';
+import { SearchSeasonsQueryDto } from 'src/modules/seasons/dtos/search';
 import {
   UpdateSeasonBodyDto,
   UpdateSeasonByIdParamDto,
-} from 'src/modules/seasons/dtos/update.dto';
+} from 'src/modules/seasons/dtos/update';
 import {
   SeasonNotFoundException,
   SeasonsNotFoundException,
 } from 'src/modules/seasons/exceptions';
 import { SeasonService } from 'src/modules/seasons/service';
 
-@ApiBearerAuth()
-@ApiTags('Temporadas')
-@Controller('seasons')
-@RequiredResource(ProtectedResource.SEASONS)
+@SeasonControllerDecorators()
 export class SeasonController {
   constructor(private readonly service: SeasonService) {}
 
@@ -47,7 +43,7 @@ export class SeasonController {
     @CurrentData() season: SeasonEntity | undefined,
     @Param() _: GetSeasonByIdParamDto,
   ): Promise<SeasonEntity> {
-    return this.verifySeason(season);
+    return this.validate(season);
   }
 
   @CreateSeasonEndpoint()
@@ -63,9 +59,9 @@ export class SeasonController {
     @Param() _: UpdateSeasonByIdParamDto,
     @Body() body: UpdateSeasonBodyDto,
   ): Promise<SeasonEntity> {
-    await this.verifySeason(season);
+    await this.validate(season);
 
-    return this.service.update(season.id, body);
+    return this.service.update(season!.id, body);
   }
 
   @DeleteSeasonEndpoint()
@@ -73,12 +69,12 @@ export class SeasonController {
     @CurrentData() season: SeasonEntity | undefined,
     @Param() _: DeleteSeasonByIdParamDto,
   ): Promise<void> {
-    await this.verifySeason(season);
+    await this.validate(season);
 
-    await this.service.delete(season.id);
+    await this.service.delete(season!.id);
   }
 
-  private async verifySeason(
+  private async validate(
     season: SeasonEntity | undefined,
   ): Promise<SeasonEntity> {
     if (season) return season;

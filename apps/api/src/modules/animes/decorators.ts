@@ -1,7 +1,25 @@
-import { applyDecorators, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  applyDecorators,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ProtectedResource } from '@repo/core';
 
-import { ResourceAction } from 'src/core/decorators/crud-action.decorator';
+import { ResourceAction } from 'src/core/decorators/crud-action';
+import { RequiredResource } from 'src/core/decorators/required-resource';
+
+export const AnimeControllerDecorators = () => {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiTags('Animes'),
+    Controller('animes'),
+    RequiredResource(ProtectedResource.ANIMES),
+  );
+};
 
 export const SearchAnimesEndpoint = () => {
   return applyDecorators(

@@ -1,29 +1,25 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Pageable, PermissionEntity, ProtectedResource } from '@repo/core';
-import { CurrentData } from 'src/core/decorators/current-data.decorator';
-import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
+import { Body, Param, Query } from '@nestjs/common';
+import { Pageable, PermissionEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data';
 import {
   GetPermissionByIdEndpoint,
+  PermissionControllerDecorators,
   SearchPermissionsEndpoint,
   UpdatePermissionEndpoint,
 } from 'src/modules/permissions/decorators';
 import { GetPermissionByIdParamDto } from 'src/modules/permissions/dtos/get-by-id';
-import { SearchPermissionsQueryDto } from 'src/modules/permissions/dtos/search.dto';
+import { SearchPermissionsQueryDto } from 'src/modules/permissions/dtos/search';
 import {
   UpdatePermissionBodyDto,
   UpdatePermissionByIdParamDto,
-} from 'src/modules/permissions/dtos/update.dto';
+} from 'src/modules/permissions/dtos/update';
 import {
   PermissionNotFoundException,
   PermissionsNotFoundException,
 } from 'src/modules/permissions/exceptions';
 import { PermissionService } from 'src/modules/permissions/service';
 
-@ApiBearerAuth()
-@ApiTags('Permissões')
-@Controller('permissions')
-@RequiredResource(ProtectedResource.PERMISSIONS)
+@PermissionControllerDecorators()
 export class PermissionController {
   constructor(private readonly service: PermissionService) {}
 
@@ -43,7 +39,7 @@ export class PermissionController {
     @CurrentData() permission: PermissionEntity | undefined,
     @Param() _: GetPermissionByIdParamDto,
   ): Promise<PermissionEntity> {
-    return this.verifyPermission(permission);
+    return this.validate(permission);
   }
 
   @UpdatePermissionEndpoint()
@@ -52,12 +48,12 @@ export class PermissionController {
     @Param() _: UpdatePermissionByIdParamDto,
     @Body() body: UpdatePermissionBodyDto,
   ): Promise<PermissionEntity> {
-    await this.verifyPermission(permission);
+    await this.validate(permission);
 
-    return this.service.update(permission.id, body);
+    return this.service.update(permission!.id, body);
   }
 
-  private async verifyPermission(
+  private async validate(
     permission: PermissionEntity | undefined,
   ): Promise<PermissionEntity> {
     if (permission) return permission;

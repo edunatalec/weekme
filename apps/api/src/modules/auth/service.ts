@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TokenResponse } from '@repo/core';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { JwtPayload } from 'src/core/interfaces/jwt-payload';
-import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
-import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
+import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in';
+import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up';
 import {
   hashPassword,
   validatePassword,
-} from 'src/modules/auth/utils/password.utils';
+} from 'src/modules/auth/utils/password';
 
 @Injectable()
 export class AuthService {
@@ -37,9 +37,9 @@ export class AuthService {
   public async signUp(data: SignUpBodyDto): Promise<TokenResponse> {
     const hashedPassword = await hashPassword(data.password);
 
-    const { id: roleId } = await this.prisma.role.findUnique({
+    const { id: roleId } = (await this.prisma.role.findUnique({
       where: { name: 'Admin' },
-    });
+    }))!;
 
     const { id } = await this.prisma.user.create({
       data: {

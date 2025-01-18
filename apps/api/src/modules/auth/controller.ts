@@ -1,19 +1,19 @@
-import { Body, Controller } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body } from '@nestjs/common';
 import { TokenResponse } from '@repo/core';
-import { IsPublic } from 'src/core/decorators/is-public.decorator';
-import { SignInEndpoint, SignUpEndpoint } from 'src/modules/auth/decorators';
-import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in.dto';
-import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up.dto';
+import {
+  AuthControllerDecorators,
+  SignInEndpoint,
+  SignUpEndpoint,
+} from 'src/modules/auth/decorators';
+import { SignInBodyDto } from 'src/modules/auth/dtos/sign-in';
+import { SignUpBodyDto } from 'src/modules/auth/dtos/sign-up';
 import {
   UserAlreadyRegisteredException,
   WrongPasswordOrEmailException,
 } from 'src/modules/auth/exceptions';
 import { AuthService } from 'src/modules/auth/service';
 
-@ApiTags('Autenticação')
-@IsPublic()
-@Controller('auth')
+@AuthControllerDecorators()
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 

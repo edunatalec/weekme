@@ -1,31 +1,27 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Pageable, ProtectedResource, UserEntity } from '@repo/core';
-import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
+import { Body, Param, Query } from '@nestjs/common';
+import { Pageable, UserEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data';
 import {
   DeleteUserEndpoint,
   GetUserByIdEndpoint,
   SearchUsersEndpoint,
   UpdateUserEndpoint,
+  UserControllerDecorators,
 } from 'src/modules/users/decorators';
-import { DeleteUserParamDto } from 'src/modules/users/dtos/delete.dto';
-import { GetUserByIdParamDto } from 'src/modules/users/dtos/get-by-id.dto';
+import { DeleteUserParamDto } from 'src/modules/users/dtos/delete';
+import { GetUserByIdParamDto } from 'src/modules/users/dtos/get-by-id';
 import {
   UpdateUserBodyDto,
   UpdateUserByIdParamDto,
-} from 'src/modules/users/dtos/update.dto';
+} from 'src/modules/users/dtos/update';
 import {
   UserNotFoundException,
   UsersNotFoundException,
 } from 'src/modules/users/exceptions';
-import { SearchUsersQueryDto } from './dtos/search.dto';
+import { SearchUsersQueryDto } from './dtos/search';
 import { UserService } from './service';
-import { CurrentData } from 'src/core/decorators/current-data.decorator';
 
-@ApiBearerAuth()
-@ApiTags('Usuários')
-@Controller('users')
-@RequiredResource(ProtectedResource.USERS)
+@UserControllerDecorators()
 export class UserController {
   constructor(private readonly service: UserService) {}
 
@@ -45,7 +41,7 @@ export class UserController {
     @CurrentData() user: UserEntity | undefined,
     @Param() _: GetUserByIdParamDto,
   ): Promise<UserEntity | null> {
-    return this.verifyUser(user);
+    return this.validate(user);
   }
 
   @UpdateUserEndpoint()
@@ -54,9 +50,9 @@ export class UserController {
     @Param() _: UpdateUserByIdParamDto,
     @Body() body: UpdateUserBodyDto,
   ): Promise<UserEntity> {
-    await this.verifyUser(user);
+    await this.validate(user);
 
-    return this.service.update(user.id, body);
+    return this.service.update(user!.id, body);
   }
 
   @DeleteUserEndpoint()
@@ -64,12 +60,12 @@ export class UserController {
     @CurrentData() user: UserEntity | undefined,
     @Param() _: DeleteUserParamDto,
   ): Promise<void> {
-    await this.verifyUser(user);
+    await this.validate(user);
 
-    await this.service.delete(user.id);
+    await this.service.delete(user!.id);
   }
 
-  private async verifyUser(user: UserEntity | undefined): Promise<UserEntity> {
+  private async validate(user: UserEntity | undefined): Promise<UserEntity> {
     if (user) return user;
 
     throw new UserNotFoundException();

@@ -6,7 +6,10 @@ import { TokenResponse } from "@repo/core";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const signIn = async (data: SignInFormData): Promise<void> => {
+export const signIn = async (
+  data: SignInFormData,
+  redirectTo: string | null,
+): Promise<void> => {
   const response = await http.request<TokenResponse>({
     endpoint: "auth/sign-in",
     method: "POST",
@@ -21,5 +24,5 @@ export const signIn = async (data: SignInFormData): Promise<void> => {
     secure: true,
   });
 
-  redirect("/admin");
+  redirect(redirectTo ?? "/admin");
 };

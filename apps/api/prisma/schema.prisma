@@ -16,7 +16,7 @@ model User {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   active         Boolean         @default(true)
-  resetPasswords ResetPassword[]
+  forgotPassword ForgotPassword?
   roles          Role[]          @relation("roles_on_users")
 
   @@index([email])
@@ -24,17 +24,17 @@ model User {
   @@map("users")
 }
 
-model ResetPassword {
+model ForgotPassword {
   id        String   @id @default(uuid())
   code      String
   expiresAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    String
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
 
   @@index([code])
-  @@map("reset_passwords")
+  @@map("forgot_passwords")
 }
 
 model Role {
@@ -106,5 +106,6 @@ model Season {
   active    Boolean    @default(true)
   animes    Anime[]    @relation("seasons_on_animes")
 
+  @@unique([name, year])
   @@map("seasons")
 }

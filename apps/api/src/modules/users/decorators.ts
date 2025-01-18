@@ -1,7 +1,24 @@
-import { applyDecorators, Delete, Get, Patch } from '@nestjs/common';
+import {
+  applyDecorators,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ProtectedResource } from '@repo/core';
 
-import { ResourceAction } from 'src/core/decorators/crud-action.decorator';
+import { ResourceAction } from 'src/core/decorators/crud-action';
+import { RequiredResource } from 'src/core/decorators/required-resource';
+
+export const UserControllerDecorators = () => {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiTags('Usuários'),
+    Controller('users'),
+    RequiredResource(ProtectedResource.USERS),
+  );
+};
 
 export const SearchUsersEndpoint = () => {
   return applyDecorators(

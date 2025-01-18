@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserEntity } from '@repo/core';
-import { CurrentUser } from 'src/core/decorators/current-user.decorator';
-import { IsPublic } from 'src/core/decorators/is-public.decorator';
+import { CurrentUser } from 'src/core/decorators/current-user';
+import { IsPublic } from 'src/core/decorators/is-public';
 
 @Controller()
 export class AppController {

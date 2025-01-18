@@ -1,19 +1,18 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Pageable, ProtectedResource, RoleEntity } from '@repo/core';
-import { CurrentData } from 'src/core/decorators/current-data.decorator';
-import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
+import { Body, Param, Query } from '@nestjs/common';
+import { Pageable, RoleEntity } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data';
 import {
   CreateRoleEndpoint,
   DeleteRoleEndpoint,
   GetRoleByIdEndpoint,
+  RoleControllerDecorators,
   SearchRolesEndpoint,
   UpdateRoleEndpoint,
 } from 'src/modules/roles/decorators';
-import { CreateRoleBodyDto } from 'src/modules/roles/dtos/create.dto';
-import { DeleteRoleByIdParamDto } from 'src/modules/roles/dtos/delete.dto';
-import { GetRoleByIdParamDto } from 'src/modules/roles/dtos/get-by-id.dto';
-import { SearchRolesQueryDto } from 'src/modules/roles/dtos/search.dto';
+import { CreateRoleBodyDto } from 'src/modules/roles/dtos/create';
+import { DeleteRoleByIdParamDto } from 'src/modules/roles/dtos/delete';
+import { GetRoleByIdParamDto } from 'src/modules/roles/dtos/get-by-id';
+import { SearchRolesQueryDto } from 'src/modules/roles/dtos/search';
 import {
   UpdateRoleBodyDto,
   UpdateRoleByIdParamDto,
@@ -24,10 +23,7 @@ import {
 } from 'src/modules/roles/exceptions';
 import { RoleService } from 'src/modules/roles/service';
 
-@ApiBearerAuth()
-@ApiTags('Cargos')
-@Controller('roles')
-@RequiredResource(ProtectedResource.ROLES)
+@RoleControllerDecorators()
 export class RoleController {
   constructor(private readonly service: RoleService) {}
 
@@ -47,7 +43,7 @@ export class RoleController {
     @CurrentData() role: RoleEntity | undefined,
     @Param() _: GetRoleByIdParamDto,
   ): Promise<RoleEntity> {
-    return this.verifyRole(role);
+    return this.validate(role);
   }
 
   @CreateRoleEndpoint()
@@ -61,9 +57,9 @@ export class RoleController {
     @Param() _: UpdateRoleByIdParamDto,
     @Body() body: UpdateRoleBodyDto,
   ): Promise<RoleEntity> {
-    await this.verifyRole(role);
+    await this.validate(role);
 
-    return this.service.update(role.id, body);
+    return this.service.update(role!.id, body);
   }
 
   @DeleteRoleEndpoint()
@@ -71,12 +67,12 @@ export class RoleController {
     @CurrentData() role: RoleEntity | undefined,
     @Param() _: DeleteRoleByIdParamDto,
   ): Promise<void> {
-    await this.verifyRole(role);
+    await this.validate(role);
 
-    await this.service.delete(role.id);
+    await this.service.delete(role!.id);
   }
 
-  private async verifyRole(role: RoleEntity | undefined): Promise<RoleEntity> {
+  private async validate(role: RoleEntity | undefined): Promise<RoleEntity> {
     if (role) return role;
 
     throw new RoleNotFoundException();

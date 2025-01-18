@@ -6,7 +6,7 @@ export const roleToEntity = (role): RoleEntity => {
   return {
     name: role.name,
     description: role.description,
-    permissions: role.permissions.map((permission) =>
+    permissions: (role.permissions ?? []).map((permission) =>
       permissionToEntity(permission),
     ),
     ...baseToEntity(role),

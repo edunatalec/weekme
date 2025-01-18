@@ -1,7 +1,7 @@
 import { CardForm } from "../components/CardForm";
 import { SignUpForm } from "./components/SignUpForm";
 
-const SignUpPage = () => {
+const Page = () => {
   return (
     <CardForm
       title="Cadastre-se"
@@ -16,4 +16,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default Page;

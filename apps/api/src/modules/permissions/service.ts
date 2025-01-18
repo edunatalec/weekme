@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Pageable, PermissionEntity } from '@repo/core';
 import { permissionToEntity } from 'src/core/database/mappers/permission.mapper';
-import { PrismaService } from 'src/core/database/prisma.service';
+import { PrismaService } from 'src/core/database/service';
 import { PrismaModule } from 'src/core/services/crud/constants';
 import { PrismaCrudService } from 'src/core/services/crud/service';
-import { SearchPermissionsQueryDto } from 'src/modules/permissions/dtos/search.dto';
-import { UpdatePermissionBodyDto } from 'src/modules/permissions/dtos/update.dto';
+import { SearchPermissionsQueryDto } from 'src/modules/permissions/dtos/search';
+import { UpdatePermissionBodyDto } from 'src/modules/permissions/dtos/update';
 
 @Injectable()
 export class PermissionService extends PrismaCrudService<PrismaModule.PERMISSIONS> {

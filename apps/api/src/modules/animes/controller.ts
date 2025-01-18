@@ -1,23 +1,22 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AnimeEntity, Pageable, ProtectedResource } from '@repo/core';
-import { CurrentData } from 'src/core/decorators/current-data.decorator';
-import { RequiredResource } from 'src/core/decorators/required-resource.decorator';
+import { Body, Param, Query } from '@nestjs/common';
+import { AnimeEntity, Pageable } from '@repo/core';
+import { CurrentData } from 'src/core/decorators/current-data';
 import {
+  AnimeControllerDecorators,
   CreateAnimeEndpoint,
   DeleteAnimeEndpoint,
   GetAnimeByIdEndpoint,
   SearchAnimesEndpoint,
   UpdateAnimeEndpoint,
 } from 'src/modules/animes/decorators';
-import { CreateAnimeBodyDto } from 'src/modules/animes/dtos/create.dto';
-import { DeleteAnimeByIdParamDto } from 'src/modules/animes/dtos/delete.dto';
-import { GetAnimeByIdParamDto } from 'src/modules/animes/dtos/get-by-id.dto';
-import { SearchAnimesQueryDto } from 'src/modules/animes/dtos/search.dto';
+import { CreateAnimeBodyDto } from 'src/modules/animes/dtos/create';
+import { DeleteAnimeByIdParamDto } from 'src/modules/animes/dtos/delete';
+import { GetAnimeByIdParamDto } from 'src/modules/animes/dtos/get-by-id';
+import { SearchAnimesQueryDto } from 'src/modules/animes/dtos/search';
 import {
   UpdateAnimeBodyDto,
   UpdateAnimeByIdParamDto,
-} from 'src/modules/animes/dtos/update.dto';
+} from 'src/modules/animes/dtos/update';
 import {
   AnimeAlreadyRegisteredException,
   AnimeNotFoundException,
@@ -25,10 +24,7 @@ import {
 } from 'src/modules/animes/exceptions';
 import { AnimeService } from 'src/modules/animes/service';
 
-@ApiBearerAuth()
-@ApiTags('Animes')
-@Controller('animes')
-@RequiredResource(ProtectedResource.ANIMES)
+@AnimeControllerDecorators()
 export class AnimeController {
   constructor(private readonly service: AnimeService) {}
 
@@ -48,7 +44,7 @@ export class AnimeController {
     @CurrentData() anime: AnimeEntity | undefined,
     @Param() _: GetAnimeByIdParamDto,
   ): Promise<AnimeEntity> {
-    return this.verifyAnime(anime);
+    return this.validate(anime);
   }
 
   @CreateAnimeEndpoint()
@@ -66,9 +62,9 @@ export class AnimeController {
     @Param() _: UpdateAnimeByIdParamDto,
     @Body() body: UpdateAnimeBodyDto,
   ): Promise<AnimeEntity> {
-    await this.verifyAnime(anime);
+    await this.validate(anime);
 
-    return this.service.update(anime.id, body);
+    return this.service.update(anime!.id, body);
   }
 
   @DeleteAnimeEndpoint()
@@ -76,14 +72,12 @@ export class AnimeController {
     @CurrentData() anime: AnimeEntity | undefined,
     @Param() _: DeleteAnimeByIdParamDto,
   ): Promise<void> {
-    await this.verifyAnime(anime);
+    await this.validate(anime);
 
-    await this.service.delete(anime.id);
+    await this.service.delete(anime!.id);
   }
 
-  private async verifyAnime(
-    anime: AnimeEntity | undefined,
-  ): Promise<AnimeEntity> {
+  private async validate(anime: AnimeEntity | undefined): Promise<AnimeEntity> {
     if (anime) return anime;
 
     throw new AnimeNotFoundException();

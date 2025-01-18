@@ -12,7 +12,7 @@ export const animeToEntity = (anime): AnimeEntity => {
     weekday: anime.weekday,
     startDate: anime.startDate || undefined,
     finishDate: anime.finishDate || undefined,
-    seasons: anime.seasons.map((season) => seasonToEntity(season)),
+    seasons: (anime.seasons ?? []).map((season) => seasonToEntity(season)),
     ...baseToEntity(anime),
   };
 };
