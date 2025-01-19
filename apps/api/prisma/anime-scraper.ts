@@ -33,7 +33,7 @@ const main = async () => {
     waitUntil: 'domcontentloaded',
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 8000));
 
   const html = await page.content();
   const $ = load(html);
@@ -67,7 +67,7 @@ const getAnime = async (
       waitUntil: 'domcontentloaded',
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const html = await page.content();
     const $ = load(html);
