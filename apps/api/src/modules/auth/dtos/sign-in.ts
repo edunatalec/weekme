@@ -1,11 +1,10 @@
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail } from 'class-validator';
+import { IsPassword } from 'src/core/decorators/is-password';
 
 export class SignInBodyDto {
   @IsEmail()
   readonly email: string;
 
-  @IsString()
-  @MinLength(8)
-  @MaxLength(20)
+  @IsPassword()
   readonly password: string;
 }

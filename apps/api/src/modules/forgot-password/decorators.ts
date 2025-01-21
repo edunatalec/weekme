@@ -17,7 +17,7 @@ export const ForgotPasswordControllerDecorators = () => {
 };
 
 export const SendCodeEndpoint = () => {
-  return applyDecorators(Post('send-code'), HttpCode(200));
+  return applyDecorators(Post('send-code'), HttpCode(HttpStatus.OK));
 };
 
 export const ValidateCodeEndpoint = () => {
@@ -28,5 +28,5 @@ export const ValidateCodeEndpoint = () => {
 };
 
 export const UpdatePasswordEndpoint = () => {
-  return applyDecorators(Post('update-password'), HttpCode(200));
+  return applyDecorators(Post('update-password'), HttpCode(HttpStatus.OK));
 };

@@ -1,4 +1,11 @@
-import { applyDecorators, Controller, Get, Patch } from '@nestjs/common';
+import {
+  applyDecorators,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Patch,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 export const ProfileControllerDecorators = () => {
@@ -15,4 +22,8 @@ export const GetProfileEndpoint = () => {
 
 export const UpdateProfileEndpoint = () => {
   return applyDecorators(Patch());
+};
+
+export const UpdateProfilePasswordEndpoint = () => {
+  return applyDecorators(Patch('password'), HttpCode(HttpStatus.NO_CONTENT));
 };

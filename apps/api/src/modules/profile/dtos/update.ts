@@ -1,7 +1,12 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
 
 export class UpdateProfileBodyDto {
   @IsString()
   @MinLength(3)
-  readonly fullName: string;
+  @IsOptional()
+  readonly fullName?: string;
+
+  @IsUrl()
+  @IsOptional()
+  readonly avatarUrl?: string;
 }
