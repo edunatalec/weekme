@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { WEEKDAYS } from '@repo/core';
+import { Schedule, WEEKDAYS } from '@repo/core';
 import { animeToEntity } from 'src/core/database/mappers/anime.mapper';
 import { PrismaService } from 'src/core/database/service';
-import { ScheduleAnime } from 'src/modules/schedule/interfaces/schedule-anime';
 
 @Injectable()
 export class ScheduleService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async getAnimes(): Promise<ScheduleAnime[]> {
+  public async getAnimes(): Promise<Schedule[]> {
     const response = await this.prisma.anime.findMany({
       where: { status: 'RELEASING' },
     });
