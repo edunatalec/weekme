@@ -4,6 +4,7 @@ import { Alert } from "@/components/Alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { usePermission } from "@/hooks/usePermission";
+import { cn } from "@/lib/utils";
 import { create, update } from "@/services/crud/service";
 import { getErrorMessage } from "@/utils/error";
 import { ProtectedResource } from "@repo/core";
@@ -40,6 +41,7 @@ export const BaseForm = <
   const { hasPermission } = usePermission(resource);
 
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   if (
     (item && !hasPermission("update", item as any)) ||
@@ -51,6 +53,7 @@ export const BaseForm = <
   const onSubmit = async (data: TFieldValues) => {
     try {
       setError(null);
+      setLoading(true);
 
       if (id) {
         await update({ id, data, resource });
@@ -63,6 +66,8 @@ export const BaseForm = <
       if (isRedirectError(error)) throw error;
 
       setError(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +80,7 @@ export const BaseForm = <
   return (
     <Form {...form}>
       <form
-        className="flex h-full flex-col"
+        className={cn("flex h-full flex-col", loading && "pointer-events-none")}
         onSubmit={form.handleSubmit(onSubmit as any)}
       >
         <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 pb-4 pt-[4.5rem] md:pt-4">
@@ -94,7 +99,7 @@ export const BaseForm = <
               Voltar
             </Button>
 
-            <Button className="flex-1" type="submit">
+            <Button className="flex-1" type="submit" loading={loading}>
               {id ? "Atualizar" : "Salvar"}
             </Button>
           </div>

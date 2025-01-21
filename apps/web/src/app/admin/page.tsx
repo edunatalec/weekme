@@ -1,11 +1,12 @@
-"use client";
+import { HomeMenus } from "@/app/admin/_components/HomeMenus";
+import { getPageTitle } from "@/utils/metadata";
+import { Metadata } from "next";
 
-import { useMenus } from "@/app/admin/_hooks/useMenus";
-import { Button } from "@/components/ui/button";
+export const metadata: Metadata = {
+  title: getPageTitle("Admin"),
+};
 
 const Page = () => {
-  const { filteredMenus } = useMenus();
-
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <h1 className="text-center text-3xl">
@@ -14,15 +15,7 @@ const Page = () => {
         admin do WeekMe
       </h1>
 
-      <div className="flex max-w-sm flex-wrap justify-center gap-2">
-        {filteredMenus.map((menu, index) => {
-          return (
-            <Button key={index} variant="outline" asChild>
-              <a href={menu.href}>{menu.text}</a>
-            </Button>
-          );
-        })}
-      </div>
+      <HomeMenus />
     </div>
   );
 };

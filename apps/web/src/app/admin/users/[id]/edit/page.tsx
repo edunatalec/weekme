@@ -1,8 +1,12 @@
-"use server";
-
 import { UserForm } from "@/app/admin/users/_components/UserForm";
 import { getById } from "@/services/crud/service";
+import { getPageTitle } from "@/utils/metadata";
 import { ProtectedResource, UserEntity } from "@repo/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Editar usuário"),
+};
 
 interface Props {
   params: Promise<{

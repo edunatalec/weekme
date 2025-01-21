@@ -6,22 +6,44 @@ import darkLogo from "@/assets/dark-logo.png";
 import lightLogo from "@/assets/light-logo.png";
 import { Center } from "@/components/Center";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { ConfirmButton } from "@/app/(auth)/_components/ConfirmButton";
+import { Form } from "@/components/ui/form";
+import { FieldValues, FormProviderProps } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { Alert } from "@/components/Alert";
 
-interface Props {
-  hasLogo?: boolean;
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode[];
-}
+type Props<
+  TFieldValues extends FieldValues,
+  TContext = any,
+  TTransformedValues extends FieldValues | undefined = undefined,
+> = {
+  readonly hasLogo?: boolean;
+  readonly title: string;
+  readonly subtitle?: string;
+  readonly errorMessage: string | null;
+  readonly successMessage?: string | null;
+  readonly loading: boolean;
+  readonly onSubmit: (data: TFieldValues) => void;
+  readonly children: React.ReactNode;
+  readonly footer?: React.ReactNode[];
+} & FormProviderProps<TFieldValues, TContext, TTransformedValues>;
 
-export const AuthForm = ({
+export const AuthForm = <
+  TFieldValues extends FieldValues,
+  TContext = any,
+  TTransformedValues extends FieldValues | undefined = undefined,
+>({
   title,
   hasLogo,
-  children,
   footer,
   subtitle,
-}: Props) => {
+  loading,
+  errorMessage,
+  successMessage,
+  onSubmit,
+  children,
+  ...form
+}: Props<TFieldValues, TContext, TTransformedValues>) => {
   const { theme, toggle } = useTheme();
 
   return (
@@ -44,7 +66,19 @@ export const AuthForm = ({
         {subtitle && <h1 className="text-foreground/80">{subtitle}</h1>}
       </div>
 
-      <div className="w-full">{children}</div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit as any)}
+          className={cn("w-full space-y-4", loading && "pointer-events-none")}
+        >
+          {errorMessage && <Alert type="error" message={errorMessage} />}
+          {successMessage && <Alert type="success" message={successMessage} />}
+
+          {children}
+
+          <ConfirmButton text="Entrar" loading={loading} />
+        </form>
+      </Form>
 
       {footer && (
         <div>

@@ -42,7 +42,7 @@ export class ForgotPasswordService {
     await this.prisma.forgotPassword.create({
       data: {
         code,
-        expiresAt,
+        expiresAt: new Date(expiresAt.toISOString()),
         user: { connect: { id: user.id } },
       },
     });
@@ -51,6 +51,7 @@ export class ForgotPasswordService {
       JSON.stringify({
         email: user.email,
         code,
+        expiresAt: expiresAt.toISOString(),
       }),
     );
 
@@ -95,9 +96,9 @@ Equipe WeekMe`,
   public validateCode(
     forgotPassword: ForgotPasswordEntity,
   ): ForgotPasswordEntity | null {
-    const now = new Date();
+    const now = new Date().toISOString();
 
-    if (now < forgotPassword.expiresAt) {
+    if (now < forgotPassword.expiresAt.toISOString()) {
       return forgotPassword;
     }
 

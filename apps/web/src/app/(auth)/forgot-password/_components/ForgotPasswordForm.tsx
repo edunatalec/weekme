@@ -1,15 +1,13 @@
 "use client";
 
-import { ConfirmButton } from "@/app/(auth)/_components/ConfirmButton";
+import { AuthForm } from "@/app/(auth)/_components/AuthForm";
+import { AuthLink } from "@/app/(auth)/_components/AuthLink";
 import { sendCodeToEmailWhenForgetPassword as sendCodeToEmailWhenUserForgetPassword } from "@/app/(auth)/forgot-password/actions";
 import {
   ForgotPasswordFormData,
   useForgotPasswordForm,
 } from "@/app/(auth)/forgot-password/schema";
-import { Alert } from "@/components/Alert";
 import { EmailFormField } from "@/components/form/EmailFormField";
-import { Form } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
 import { getErrorMessage } from "@/utils/error";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { useState } from "react";
@@ -40,18 +38,21 @@ export const ForgotPasswordForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("space-y-4", loading && "pointer-events-none")}
-      >
-        {errorMessage && <Alert type="error" message={errorMessage} />}
-        {message && <Alert type="success" message={message} />}
-
-        <EmailFormField control={form.control} name="email" />
-
-        <ConfirmButton text="Enviar" loading={loading} />
-      </form>
-    </Form>
+    <AuthForm
+      title="Recupere sua senha"
+      subtitle="Esqueceu sua senha? Não se preocupe, nós ajudamos você a redefini-la para voltar ao universo dos animes!"
+      footer={[
+        "Lembrou sua senha? ",
+        <AuthLink key="/sign-in" href="/sign-in" text="Faça login" />,
+        " e continue explorando o calendário definitivo de animes!",
+      ]}
+      loading={loading}
+      errorMessage={errorMessage}
+      onSubmit={onSubmit}
+      successMessage={message}
+      {...form}
+    >
+      <EmailFormField control={form.control} name="email" />
+    </AuthForm>
   );
 };

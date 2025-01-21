@@ -18,7 +18,7 @@ export const middleware = async (request: NextRequest) => {
     route = hasBlockedRoute({
       pathname,
       fallbackRoute: "/admin",
-      blockedRoutes: ["/sign-in", "/sign-up", "/reset-password"],
+      blockedRoutes: ["/sign-in", "/sign-up", "/forgot-password"],
     });
   } else {
     route = hasBlockedRoute({

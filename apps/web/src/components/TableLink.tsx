@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 interface Props {
@@ -7,11 +5,11 @@ interface Props {
   text: string;
 }
 
-export const AuthLink = ({ href, text }: Props) => {
+export const TableLink = ({ href, text }: Props) => {
   return (
     <Link
       href={href}
-      className="text-success transition-colors hover:text-success/60"
+      className="text-primary underline-offset-4 hover:underline"
     >
       {text}
     </Link>

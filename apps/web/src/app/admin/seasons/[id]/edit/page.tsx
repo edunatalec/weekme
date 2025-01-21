@@ -1,8 +1,12 @@
-"use server";
-
 import { SeasonsForm } from "@/app/admin/seasons/_components/SeasonsForm";
 import { getById } from "@/services/crud/service";
+import { getPageTitle } from "@/utils/metadata";
 import { ProtectedResource, SeasonEntity } from "@repo/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Editar temporada"),
+};
 
 interface Props {
   params: Promise<{

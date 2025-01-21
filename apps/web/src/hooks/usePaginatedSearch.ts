@@ -201,33 +201,39 @@ export const usePaginatedSearch = <T extends BaseEntity>({
     }
   }, [size, resource, currentPage, filters]);
 
-  useEffect(() => {
-    (async () => {
-      if (navigated.current) {
-        setFetchingMore(true);
+  useEffect(
+    () => {
+      (async () => {
+        if (navigated.current) {
+          setFetchingMore(true);
 
-        await handleFetchItems();
+          await handleFetchItems();
 
-        navigated.current = false;
-        setFetchingMore(false);
-      } else {
-        setLoading(true);
+          navigated.current = false;
+          setFetchingMore(false);
+        } else {
+          setLoading(true);
 
-        await handleFetchItems();
+          await handleFetchItems();
 
-        setLoading(false);
-      }
-    })();
+          setLoading(false);
+        }
+      })();
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleFetchItems]);
+    [handleFetchItems],
+  );
 
-  useEffect(() => {
-    updateUrlSearchParams({
-      page: currentPage.toString(),
-      search: filters[searchName],
-    });
+  useEffect(
+    () => {
+      updateUrlSearchParams({
+        page: currentPage.toString(),
+        search: filters[searchName],
+      });
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [],
+  );
 
   const pagination = useMemo<PaginationData[]>(() => {
     if (meta.totalPages === 0) return [];

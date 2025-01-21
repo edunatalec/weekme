@@ -1,8 +1,12 @@
-"use server";
-
 import { AnimeForm } from "@/app/admin/animes/_components/AnimeForm";
 import { getById } from "@/services/crud/service";
+import { getPageTitle } from "@/utils/metadata";
 import { AnimeEntity, ProtectedResource } from "@repo/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Editar anime"),
+};
 
 interface Props {
   params: Promise<{

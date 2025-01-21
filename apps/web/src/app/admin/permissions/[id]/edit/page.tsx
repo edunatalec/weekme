@@ -1,8 +1,12 @@
-"use server";
-
 import { PermissionForm } from "@/app/admin/permissions/_components/PermissionForm";
 import { getById } from "@/services/crud/service";
+import { getPageTitle } from "@/utils/metadata";
 import { PermissionEntity, ProtectedResource } from "@repo/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Editar permissão"),
+};
 
 interface Props {
   params: Promise<{

@@ -2,20 +2,17 @@
 
 import { useState } from "react";
 
-import { Form } from "@/components/ui/form";
-
 import { EmailFormField } from "@/components/form/EmailFormField";
 import { NameFormField } from "@/components/form/NameFormField";
 import { PasswordFormField } from "@/components/form/PasswordFormField";
 
-import { ConfirmButton } from "@/app/(auth)/_components/ConfirmButton";
+import { AuthForm } from "@/app/(auth)/_components/AuthForm";
+import { AuthLink } from "@/app/(auth)/_components/AuthLink";
 import { useSession } from "@/contexts/SessionProvider";
 import { getErrorMessage } from "@/utils/error";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { signUp } from "../actions";
 import { SignUpFormData, useSignUpForm } from "../schema";
-import { cn } from "@/lib/utils";
-import { Alert } from "@/components/Alert";
 
 export const SignUpForm = () => {
   const form = useSignUpForm();
@@ -42,28 +39,29 @@ export const SignUpForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("space-y-4", loading && "pointer-events-none")}
-      >
-        {errorMessage && <Alert type="error" message={errorMessage} />}
+    <AuthForm
+      hasLogo
+      title="Junte-se ao WeekMe!"
+      subtitle="Crie sua conta e seja parte da comunidade otaku que vive e respira animes. Descubra, organize e contribua com o calendário definitivo de animes!"
+      footer={[
+        "Já tem uma conta? ",
+        <AuthLink key="/sign-in" href="/sign-in" text="Faça o login" />,
 
-        <NameFormField control={form.control} name="fullName" />
-        <EmailFormField control={form.control} name="email" />
-        <PasswordFormField
-          control={form.control}
-          name="password"
-          label="Senha"
-        />
-        <PasswordFormField
-          control={form.control}
-          name="confirmPassword"
-          label="Confirme a sua senha"
-        />
-
-        <ConfirmButton text="Cadastrar-se" loading={loading} />
-      </form>
-    </Form>
+        " agora e continue sua jornada no universo dos animes!",
+      ]}
+      loading={loading}
+      errorMessage={errorMessage}
+      onSubmit={onSubmit}
+      {...form}
+    >
+      <NameFormField control={form.control} name="fullName" />
+      <EmailFormField control={form.control} name="email" />
+      <PasswordFormField control={form.control} name="password" label="Senha" />
+      <PasswordFormField
+        control={form.control}
+        name="confirmPassword"
+        label="Confirme a sua senha"
+      />
+    </AuthForm>
   );
 };
