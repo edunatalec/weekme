@@ -13,11 +13,13 @@ export const ScheduleAnime = ({ anime }: Props) => {
     >
       <Image
         src={anime.imageUrl}
-        layout="fill"
+        fill
         width={0}
         height={0}
+        sizes="100%"
         alt={`Foto do anime ${anime.name}`}
-        objectFit="cover"
+        className="object-cover"
+        priority
       />
       <div className="absolute inset-0 z-10 flex flex-col gap-2 overflow-visible bg-card/80 opacity-0 backdrop-blur-sm transition-opacity hover:opacity-100">
         <span className="px-2 text-lg font-bold">{anime.name}</span>

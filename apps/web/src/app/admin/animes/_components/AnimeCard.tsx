@@ -25,12 +25,13 @@ export const AnimeCard = ({ anime }: Props) => {
       <div className="relative h-[260px] w-full">
         <Image
           src={anime.imageUrl}
-          layout="fill"
+          fill
           width={0}
           height={0}
+          sizes="100%"
           alt={`Foto do anime ${anime.name}`}
-          className="rounded-md"
-          objectFit="cover"
+          className="rounded-md object-cover"
+          priority
         />
       </div>
 

@@ -76,4 +76,14 @@
   html[data-theme-loading] {
     visibility: hidden;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: hsl(var(--foreground));
+    -webkit-box-shadow: 0 0 0px 1000px hsl(var(--background)) inset;
+    box-shadow: 0 0 0px 1000px hsl(var(--background)) inset;
+    color: hsl(var(--foreground));
+    caret-color: hsl(var(--foreground));
+  }
 }
