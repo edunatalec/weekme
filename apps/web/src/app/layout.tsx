@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { SessionProvider } from "@/contexts/SessionProvider";
+import { getPageTitle } from "@/utils/metadata";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -12,7 +13,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "WeekMe",
+  title: getPageTitle("O maior calendário de animes"),
+  description: "Bem-vindo ao WeekMe, o calendário definitivo de animes!",
   icons: {
     icon: "/favicon.ico",
   },

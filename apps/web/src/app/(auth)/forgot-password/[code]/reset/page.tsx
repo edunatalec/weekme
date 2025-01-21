@@ -1,5 +1,11 @@
 import { AuthForm } from "@/app/(auth)/_components/AuthForm";
 import { ResetPasswordForm } from "@/app/(auth)/forgot-password/[code]/reset/_components/ResetPasswordForm";
+import { getPageTitle } from "@/utils/metadata";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Resetar a senha"),
+};
 
 const Page = () => {
   return (

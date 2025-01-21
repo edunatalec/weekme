@@ -1,6 +1,12 @@
 import { AuthForm } from "@/app/(auth)/_components/AuthForm";
 import { AuthLink } from "@/app/(auth)/_components/AuthLink";
 import { ForgotPasswordForm } from "@/app/(auth)/forgot-password/_components/ForgotPasswordForm";
+import { getPageTitle } from "@/utils/metadata";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Esqueci minha senha"),
+};
 
 const Page = () => {
   return (

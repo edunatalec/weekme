@@ -1,6 +1,12 @@
 import { AuthForm } from "@/app/(auth)/_components/AuthForm";
 import { AuthLink } from "@/app/(auth)/_components/AuthLink";
 import { SignInForm } from "./_components/SignInForm";
+import { Metadata } from "next";
+import { getPageTitle } from "@/utils/metadata";
+
+export const metadata: Metadata = {
+  title: getPageTitle("Entrar"),
+};
 
 const Page = () => {
   return (
