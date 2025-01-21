@@ -1,3 +1,5 @@
+"use server";
+
 import { fetchScheduleAnimes } from "@/app/actions";
 import Image from "next/image";
 

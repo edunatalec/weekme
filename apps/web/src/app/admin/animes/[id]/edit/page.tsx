@@ -1,3 +1,5 @@
+"use server";
+
 import { AnimeForm } from "@/app/admin/animes/_components/AnimeForm";
 import { getById } from "@/services/crud/service";
 import { AnimeEntity, ProtectedResource } from "@repo/core";

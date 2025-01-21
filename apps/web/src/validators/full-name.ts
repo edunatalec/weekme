@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const fullNameValidator = z.string({ message: "Obrigatório" }).refine(
+export const fullNameValidator = z.string().refine(
   (value) => {
     const words = value.trim().split(/\s+/);
 

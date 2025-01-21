@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         success:
-          "bg-success text-xl font-bold text-success-foreground hover:bg-success/60",
+          "bg-success text-xl font-bold text-success-foreground hover:bg-success/60 ",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -38,15 +38,36 @@ const buttonVariants = cva(
   },
 );
 
+const spinnerVariants = {
+  default: "border-primary-foreground",
+  success: "border-success-foreground",
+  destructive: "border-destructive-foreground",
+  outline: "border-background-foreground",
+  secondary: "border-secondary-foreground",
+  menu: "border-success-foreground",
+  ghost: "border-success-foreground",
+  link: "border-success-foreground",
+};
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, type = "button", ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      type = "button",
+      loading = false,
+      children,
+      ...props
+    },
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
@@ -56,7 +77,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         {...props}
-      />
+      >
+        {loading ? (
+          <span
+            className={cn(
+              spinnerVariants[variant || "default"],
+              "loader size-6 animate-spin rounded-full border-2 border-t-transparent",
+            )}
+          />
+        ) : (
+          children
+        )}
+      </Comp>
     );
   },
 );

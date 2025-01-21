@@ -1,8 +1,20 @@
+import { AuthForm } from "@/app/(auth)/_components/AuthForm";
+import { AuthLink } from "@/app/(auth)/_components/AuthLink";
+import { ForgotPasswordForm } from "@/app/(auth)/forgot-password/_components/ForgotPasswordForm";
+
 const Page = () => {
   return (
-    <div>
-      <h1>Esqueci minha senha</h1>
-    </div>
+    <AuthForm
+      title="Recupere sua senha"
+      subtitle="Esqueceu sua senha? Não se preocupe, nós ajudamos você a redefini-la para voltar ao universo dos animes!"
+      footer={[
+        "Lembrou sua senha? ",
+        <AuthLink key="/sign-in" href="/sign-in" text="Faça login" />,
+        " e continue explorando o calendário definitivo de animes!",
+      ]}
+    >
+      <ForgotPasswordForm />
+    </AuthForm>
   );
 };
 

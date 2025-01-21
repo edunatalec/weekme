@@ -1,5 +1,3 @@
-import { emailValidator } from "@/validators/email";
-import { fullNameValidator } from "@/validators/full-name";
 import { passwordValidator } from "@/validators/password";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,8 +5,6 @@ import { z } from "zod";
 
 const schema = z
   .object({
-    fullName: fullNameValidator,
-    email: emailValidator,
     password: passwordValidator,
     confirmPassword: passwordValidator,
   })
@@ -17,10 +13,10 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-export type SignUpFormData = z.infer<typeof schema>;
+export type ResetPasswordFormData = z.infer<typeof schema>;
 
-export const useSignUpForm = () => {
-  return useForm<SignUpFormData>({
+export const useResetPasswordForm = () => {
+  return useForm<ResetPasswordFormData>({
     resolver: zodResolver(schema),
   });
 };

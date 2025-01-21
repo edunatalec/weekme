@@ -1,3 +1,5 @@
+"use server";
+
 import { UserForm } from "@/app/admin/users/_components/UserForm";
 import { getById } from "@/services/crud/service";
 import { ProtectedResource, UserEntity } from "@repo/core";

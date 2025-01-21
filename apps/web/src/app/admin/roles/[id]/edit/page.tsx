@@ -1,3 +1,5 @@
+"use server";
+
 import { RoleForm } from "@/app/admin/roles/_components/RoleForm";
 import { getById } from "@/services/crud/service";
 import { ProtectedResource, RoleEntity } from "@repo/core";

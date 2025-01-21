@@ -12,7 +12,7 @@ export const Logout = () => {
     >
       <Link href="/sign-in?logout">
         <LogOut />
-        <span>Logout</span>
+        <span>Sair</span>
       </Link>
     </Button>
   );

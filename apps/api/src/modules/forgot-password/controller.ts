@@ -26,7 +26,9 @@ export class ForgotPasswordController {
         const forgotPassword = this.service.validateCode(user.forgotPassword);
 
         if (!forgotPassword) {
-          this.service.deleteCode(user.forgotPassword.id);
+          await this.service.deleteCode(user.forgotPassword.id);
+
+          await this.service.sendCode(user);
         }
       } else {
         await this.service.sendCode(user);
@@ -35,7 +37,7 @@ export class ForgotPasswordController {
 
     return {
       message:
-        'O código será enviado caso o e-mail exista na nossa base de dados.',
+        'O link para recuperar a sua senha será enviado no seu e-mail caso ele esteja cadastrado.',
     };
   }
 

@@ -1,3 +1,5 @@
+"use server";
+
 import { SeasonsForm } from "@/app/admin/seasons/_components/SeasonsForm";
 import { getById } from "@/services/crud/service";
 import { ProtectedResource, SeasonEntity } from "@repo/core";

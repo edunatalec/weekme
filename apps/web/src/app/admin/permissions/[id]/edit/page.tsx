@@ -1,3 +1,5 @@
+"use server";
+
 import { PermissionForm } from "@/app/admin/permissions/_components/PermissionForm";
 import { getById } from "@/services/crud/service";
 import { PermissionEntity, ProtectedResource } from "@repo/core";

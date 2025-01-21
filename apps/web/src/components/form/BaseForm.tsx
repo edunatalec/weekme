@@ -1,9 +1,11 @@
 "use client";
 
+import { Alert } from "@/components/Alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { usePermission } from "@/hooks/usePermission";
 import { create, update } from "@/services/crud/service";
+import { getErrorMessage } from "@/utils/error";
 import { ProtectedResource } from "@repo/core";
 import {
   isRedirectError,
@@ -34,8 +36,9 @@ export const BaseForm = <
   children,
   ...form
 }: Props<TFieldValues, TContext, TTransformedValues>) => {
-  const { hasPermission } = usePermission(resource);
   const router = useRouter();
+  const { hasPermission } = usePermission(resource);
+
   const [error, setError] = useState<string | null>(null);
 
   if (
@@ -59,7 +62,7 @@ export const BaseForm = <
     } catch (error) {
       if (isRedirectError(error)) throw error;
 
-      setError((error as Error).message);
+      setError(getErrorMessage(error));
     }
   };
 
@@ -80,12 +83,7 @@ export const BaseForm = <
         </div>
 
         <div className="space-y-2 p-4">
-          {error && (
-            <div className="flex flex-col rounded-md border border-destructive p-2 text-destructive">
-              <span className="font-bold">Erro</span>
-              <span className="text-sm">{error}</span>
-            </div>
-          )}
+          {error && <Alert type="error" message={error} />}
 
           <div className="flex gap-2 2xl:ml-auto 2xl:w-1/2">
             <Button

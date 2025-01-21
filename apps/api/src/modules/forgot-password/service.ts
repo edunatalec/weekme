@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ForgotPasswordEntity, UserEntity } from '@repo/core';
+import {
+  encodeStringToBase64,
+  ForgotPasswordEntity,
+  UserEntity,
+} from '@repo/core';
 import { userToEntity } from 'src/core/database/mappers/user.mapper';
 import { PrismaService } from 'src/core/database/service';
 import { MailerService } from 'src/core/services/mailer/service';
@@ -43,16 +47,25 @@ export class ForgotPasswordService {
       },
     });
 
+    const encodedInfo = encodeStringToBase64(
+      JSON.stringify({
+        email: user.email,
+        code,
+      }),
+    );
+
+    const link = `${process.env.WEB_URL}/forgot-password/${encodedInfo}/reset`;
+
     await this.mailer.send({
       to: {
         email: user.email,
         name: user.fullName,
       },
-      subject: 'WeekMe: Recuperar senha',
+      subject: 'Recuperar senha',
       message: `Olá,<br>
 <br>
-Você solicitou a recuperação da sua senha. Use o código abaixo para redefinir sua senha:<br>
-<b>${code}</b><br>
+Você solicitou a recuperação da sua senha.<br>
+Acesse o seguinte link: ${link}<br>
 <br>
 Este link é válido por 10 minutos.<br>
 <br>

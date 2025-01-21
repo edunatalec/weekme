@@ -1,19 +1,21 @@
-import { CardForm } from "@/app/(auth)/components/CardForm";
-import { SignInForm } from "./components/SignInForm";
+import { AuthForm } from "@/app/(auth)/_components/AuthForm";
+import { AuthLink } from "@/app/(auth)/_components/AuthLink";
+import { SignInForm } from "./_components/SignInForm";
 
 const Page = () => {
   return (
-    <CardForm
+    <AuthForm
       hasLogo
-      title="Entre com sua conta"
-      footer={{
-        text: "Ainda não possui conta?",
-        link: "Cadastre-se aqui",
-        linkUrl: "/sign-up",
-      }}
+      title="Seja bem-vindo ao WeekMe!"
+      subtitle="Faça login e compartilhe suas paixões com a comunidade otaku. Juntos, construímos o calendário definitivo de animes."
+      footer={[
+        "Ainda não tem uma conta? ",
+        <AuthLink key="/sign-up" href="/sign-up" text="Cadastre-se" />,
+        " agora e comece a explorar, organizar e compartilhar seus animes favoritos com a comunidade!",
+      ]}
     >
       <SignInForm />
-    </CardForm>
+    </AuthForm>
   );
 };
 

@@ -5,6 +5,7 @@ import {
   search as searchService,
   update,
 } from "@/services/crud/service";
+import { getErrorMessage } from "@/utils/error";
 import { BaseEntity, Meta, ProtectedResource } from "@repo/core";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -194,7 +195,7 @@ export const usePaginatedSearch = <T extends BaseEntity>({
     } catch (error) {
       if (isRedirectError(error)) throw error;
 
-      setError((error as Error).message);
+      setError(getErrorMessage(error));
       setItems([]);
       setMeta({ count: 0, page: 0, totalPages: 0 });
     }
