@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -147,11 +147,63 @@ const seedPermissions = async () => {
   }
 };
 
+const seedSeasons = async () => {
+  const seasons: Prisma.SeasonCreateInput[] = [
+    {
+      name: 'SPRING',
+      year: 2025,
+      show: true,
+    },
+    {
+      name: 'SUMMER',
+      year: 2025,
+      show: true,
+    },
+    {
+      name: 'FALL',
+      year: 2025,
+      show: true,
+    },
+    {
+      name: 'WINTER',
+      year: 2025,
+      show: true,
+    },
+
+    {
+      name: 'SPRING',
+      year: 2024,
+    },
+    {
+      name: 'SUMMER',
+      year: 2024,
+    },
+    {
+      name: 'FALL',
+      year: 2024,
+    },
+    {
+      name: 'WINTER',
+      year: 2024,
+    },
+  ];
+
+  for (const season of seasons) {
+    await prisma.season.create({
+      data: season,
+    });
+
+    console.log('Season', season.name, season.year, 'created');
+  }
+};
+
 const main = async () => {
   try {
     await seedPermissions();
     console.log();
     await seedRoles();
+    console.log();
+    await seedSeasons();
   } catch (error) {
     console.error(error);
   } finally {

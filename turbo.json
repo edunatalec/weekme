@@ -2,30 +2,15 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "prisma:push": {
-      "dependsOn": ["docker:up"],
-      "cache": false
-    },
-    "prisma:generate": {
-      "cache": false
-    },
-    "docker:up": {
-      "cache": false
-    },
-    "docker:down": {
-      "cache": false
-    },
-    "prisma:seed": {
-      "dependsOn": ["prisma:push", "prisma:generate"],
-      "cache": false
-    },
+    "prisma:generate": { "cache": false },
+    "docker:up": { "cache": false },
     "build": {
-      "dependsOn": ["^build", "docker:up", "prisma:generate"],
+      "dependsOn": ["^build", "prisma:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "dev": {
-      "dependsOn": ["docker:up", "prisma:generate"],
+      "dependsOn": ["prisma:generate"],
       "cache": false,
       "persistent": true
     }

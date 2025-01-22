@@ -20,9 +20,14 @@ export class AnimeService extends PrismaCrudService<PrismaModule.ANIMES> {
     return this._search({
       page: query.page,
       size: query.size,
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: [
+        {
+          weekday: 'asc',
+        },
+        {
+          name: 'asc',
+        },
+      ],
       where: { name: { contains: query.name, mode: 'insensitive' } },
     });
   }

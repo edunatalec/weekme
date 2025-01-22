@@ -17,7 +17,13 @@ Temos que criar os arquivos `.env` dentro da raiz de cada projeto que fica dentr
 Na primeira vez que rodarmos o projeto é importante deixar configurado o banco de dados e para precisamos criar as tabelas e alguns dados essenciais para o projeto funcionar corretamente. Então rodaremos o seguinte comando na na pasta raiz:
 
 ```bash
-npm run prisma:seed
+sh scripts/seed.sh
+```
+
+Você pode baixar alguns animes executando o comando abaixo para ter uma experiência mais completa
+
+```bash
+sh scripts/scraper.sh
 ```
 
 ### Execução
@@ -25,7 +31,7 @@ npm run prisma:seed
 Depois de ter realizado todos os passos anteriores estamos aptos a rodar o projeto sendo necessário apenas executar o seguinte comando
 
 ```bash
-npm run dev
+sh scripts/dev.sh
 ```
 
 ### Swagger

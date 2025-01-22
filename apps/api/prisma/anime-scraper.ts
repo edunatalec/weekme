@@ -33,7 +33,7 @@ const main = async () => {
     waitUntil: 'domcontentloaded',
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 8000));
+  await new Promise((resolve) => setTimeout(resolve, 6000));
 
   const html = await page.content();
   const $ = load(html);
@@ -82,8 +82,24 @@ const getAnime = async (
     const status = getValueByType('Status');
     const startDate = getValueByType('Start Date');
     const endDate = getValueByType('End Date');
+    const season = getValueByType('Season').trim();
 
     const backgroundUrl = $('.banner').attr('style');
+
+    let seasonId: string | undefined;
+
+    if (season) {
+      const response = await prisma.season.findFirst({
+        where: {
+          name: season
+            .split(' ')[0]
+            .toUpperCase() as Prisma.EnumSeasonNameFilter<'Season'>,
+          year: Number(season.split(' ')[1]),
+        },
+      });
+
+      seasonId = response?.id;
+    }
 
     const anime: Prisma.AnimeCreateInput = {
       name: $('.header .content h1').text().trim(),
@@ -94,6 +110,11 @@ const getAnime = async (
       weekday,
       startDate: (startDate && new Date(startDate)) || undefined,
       finishDate: (endDate && new Date(endDate)) || undefined,
+      seasons: seasonId
+        ? {
+            connect: { id: seasonId },
+          }
+        : undefined,
     };
 
     await prisma.anime.create({ data: anime });
