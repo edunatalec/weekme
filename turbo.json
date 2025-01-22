@@ -3,7 +3,6 @@
   "ui": "tui",
   "tasks": {
     "prisma:generate": { "cache": false },
-    "docker:up": { "cache": false },
     "build": {
       "dependsOn": ["^build", "prisma:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

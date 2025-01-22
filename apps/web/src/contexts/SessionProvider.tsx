@@ -2,6 +2,7 @@
 
 import { getSessionUser } from "@/actions/getSessionUser";
 import { UserEntity } from "@repo/core";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import {
   createContext,
   useCallback,
@@ -27,13 +28,17 @@ export const SessionProvider = ({
   const [loading, setLoading] = useState<boolean>(true);
 
   const updateUser = useCallback(async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const user = await getSessionUser();
+      const user = await getSessionUser();
 
-    setUser(user);
-
-    setLoading(false);
+      setUser(user);
+    } catch (error) {
+      if (isRedirectError(error)) throw error;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {

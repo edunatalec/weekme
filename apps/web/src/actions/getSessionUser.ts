@@ -2,7 +2,6 @@
 
 import http from "@/services/http/http";
 import { UserEntity } from "@repo/core";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 
 export const getSessionUser = async (): Promise<UserEntity | null> => {
@@ -10,16 +9,10 @@ export const getSessionUser = async (): Promise<UserEntity | null> => {
 
   if (!token) return null;
 
-  try {
-    const response = await http.request({
-      endpoint: "profile",
-      method: "GET",
-    });
+  const response = await http.request<UserEntity>({
+    endpoint: "profile",
+    method: "GET",
+  });
 
-    return response.data;
-  } catch (error) {
-    if (isRedirectError(error)) throw error;
-
-    return null;
-  }
+  return response.data;
 };

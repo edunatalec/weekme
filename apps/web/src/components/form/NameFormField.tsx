@@ -19,7 +19,7 @@ export const NameFormField = <
   return (
     <InputFormField
       {...form}
-      label="Nome"
+      label="Nome completo"
       type="text"
       icon={{
         left: <User />,

@@ -8,7 +8,7 @@ import { MultiSelectFormField } from "@/components/form/MultiSelectFormField";
 import { SelectFormField } from "@/components/form/SelectFormField";
 import { TextAreaFormField } from "@/components/form/TextAreaFormField";
 import { search } from "@/services/crud/service";
-import { urlValidator } from "@/validators/url.validator";
+import { urlValidator } from "@/validators/url";
 import {
   AnimeEntity,
   AnimeStatus,
