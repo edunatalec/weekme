@@ -10,14 +10,16 @@ interface Props<
   control: Control<TFieldValues, TName>;
   name: TName;
   label: string;
+  hideLeftIcon?: boolean;
 }
 
 export const PasswordFormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(
-  form: Props<TFieldValues, TName>,
-) => {
+>({
+  hideLeftIcon,
+  ...form
+}: Props<TFieldValues, TName>) => {
   const [showPassword, toggleShowPassword] = useReducer(
     (show: boolean) => !show,
     false,
@@ -29,7 +31,7 @@ export const PasswordFormField = <
       label={form.label}
       type={showPassword ? "text" : "password"}
       icon={{
-        left: <LockKeyholeIcon />,
+        left: hideLeftIcon || <LockKeyholeIcon />,
         right: showPassword ? <Eye /> : <EyeOff />,
         onRightClick: toggleShowPassword,
       }}

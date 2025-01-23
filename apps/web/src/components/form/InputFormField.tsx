@@ -46,7 +46,7 @@ export const InputFormField = <
             placeholder={placeholder}
             className={cn(
               icon?.right && "pr-14",
-              icon?.left && "pl-14",
+              icon?.left && typeof icon?.left !== "boolean" && "pl-14",
               "w-full",
             )}
           />

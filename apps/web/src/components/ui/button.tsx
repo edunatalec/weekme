@@ -29,6 +29,7 @@ const buttonVariants = cva(
         menu: "h-10 rounded-md px-2",
         icon: "size-8",
         auto: "h-auto w-auto",
+        min: "h-8 self-start text-sm font-medium px-4 py-2",
       },
     },
     defaultVariants: {
