@@ -47,3 +47,7 @@ npx prisma studio
 ```
 
 Podemos também usar ferramentas mais avançadas como: DBeaver, pgAdmin...
+
+### Apresentação
+
+![Gif](assets/weekme.gif)
